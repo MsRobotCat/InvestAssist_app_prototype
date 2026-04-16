@@ -1,0 +1,4202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>InvestAssist — Hybrid v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Manrope:wght@300..800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F4F5EF;
+    --bg-2: #ECEEE4;
+    --card: #FFFFFF;
+    --card-hover: #FDFDF9;
+    --border: #E2E4DA;
+    --border-2: #D4D7C9;
+    --divider: #ECEEE4;
+
+    --ink: #1F2A20;
+    --ink-2: #4D5A4F;
+    --ink-3: #8A9389;
+    --ink-4: #B9BFB7;
+
+    --sage: #3C6943;
+    --sage-2: #2E5B37;
+    --sage-bg: #E4F0DD;
+    --sage-border: #C5D9B8;
+
+    --amber: #9A6B1F;
+    --amber-2: #7A5210;
+    --amber-bg: #FBF0D9;
+    --amber-bg-2: #FCF5E4;
+    --amber-border: #E8D4A0;
+
+    --red: #A73B21;
+    --red-bg: #F7DED3;
+    --red-border: #E9B3A0;
+
+    --blue: #355887;
+    --blue-2: #1F3D6B;
+    --blue-bg: #DCE6F1;
+    --blue-bg-2: #EBF1F7;
+    --blue-border: #BACDE0;
+
+    --phone-w: 390px;
+    --r: 20px;
+    --r-sm: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background: linear-gradient(160deg, #D8DDD0 0%, #C7CEBB 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 32px 20px 64px;
+  }
+
+  .display {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  /* ───────── Phone frame ───────── */
+  .phone {
+    width: var(--phone-w);
+    max-width: 100%;
+    background: var(--bg);
+    border-radius: 52px;
+    border: 10px solid #18221A;
+    box-shadow:
+      0 0 0 2px #2A3630,
+      inset 0 0 0 1px rgba(255,255,255,0.05),
+      0 40px 100px rgba(22,30,24,0.35),
+      0 12px 30px rgba(22,30,24,0.2);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 30px 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .status-bar .time { font-weight: 700; font-size: 15px; }
+  .status-icons { display: flex; gap: 4px; align-items: center; font-size: 13px; }
+
+  .island {
+    width: 120px; height: 34px; background: #000;
+    border-radius: 18px; margin: 0 auto; position: relative; top: -2px;
+  }
+
+  .screen {
+    height: 820px;
+    overflow-y: auto;
+    position: relative;
+    padding-bottom: 120px;
+  }
+  .screen::-webkit-scrollbar { display: none; }
+
+  /* ───────── Header ───────── */
+  .app-header {
+    padding: 22px 24px 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 12px;
+  }
+  .app-header .greeting {
+    font-size: 12px;
+    color: var(--ink-3);
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .app-header h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 28px;
+    font-weight: 500;
+    font-style: italic;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .app-header-right {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .app-header .date {
+    font-size: 12px;
+    color: var(--ink-3);
+    font-weight: 500;
+    text-align: right;
+    line-height: 1.3;
+  }
+  .app-header .date .day {
+    display: block;
+    font-size: 11px;
+    color: var(--ink-4);
+    margin-top: 1px;
+  }
+  .app-header .date .updated {
+    display: block;
+    font-size: 10px;
+    color: var(--ink-4);
+    margin-top: 4px;
+    letter-spacing: 0.2px;
+  }
+  .settings-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 0;
+    color: var(--ink-2);
+    transition: all 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+    flex-shrink: 0;
+    margin-top: -2px;
+  }
+  .settings-btn:active {
+    background: var(--bg-2);
+    transform: scale(0.96);
+  }
+  .settings-btn svg {
+    width: 15px;
+    height: 15px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ───────── Tab bar (bottom navigation) ─────────
+     Lives as a direct child of .phone so absolute positioning anchors it
+     to the phone's bottom edge, independent of scroll position. */
+  .tabs-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding: 10px 24px 18px;
+    z-index: 200;
+    background: rgba(244, 245, 239, 0.88);
+    backdrop-filter: saturate(140%) blur(18px);
+    -webkit-backdrop-filter: saturate(140%) blur(18px);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -8px 20px -12px rgba(22, 30, 24, 0.15);
+    margin: 0;
+  }
+  .tabs {
+    display: flex;
+    gap: 2px;
+    background: var(--bg-2);
+    padding: 4px;
+    border-radius: 14px;
+  }
+  /* Scrollable containers have extra bottom padding so content isn't
+     hidden behind the bottom tabs bar (see .screen, .sheet-body, .settings-body). */
+  .tab {
+    flex: 1;
+    padding: 9px 0;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1px;
+    color: var(--ink-3);
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tab.active {
+    background: var(--card);
+    color: var(--ink);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+
+  .panel { display: none; padding: 8px 24px 20px; }
+  .panel.active { display: block; animation: fadeUp 0.35s ease; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ───────── To do panel header ───────── */
+  .todo-header {
+    padding: 18px 4px 6px;
+  }
+  .todo-header .kicker {
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .priority-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 6px 0 18px;
+    font-size: 11px;
+    color: var(--ink-2);
+    font-weight: 600;
+  }
+  .priority-row .pill {
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: var(--bg-2);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .priority-row .pill .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+  }
+  .priority-row .pill .dot.amber { background: var(--amber); }
+  .priority-row .pill .dot.sage { background: var(--sage); }
+  .priority-row .pill .dot.blue { background: var(--blue); }
+
+  /* ───────── Stream cards ───────── */
+  .stream-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .stream-card:active {
+    transform: scale(0.99);
+    background: var(--card-hover);
+  }
+
+  .stream-card .source {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .stream-card .source .dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--ink-4);
+  }
+  .stream-card .chev {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    font-size: 14px;
+    color: var(--ink-4);
+    font-weight: 400;
+  }
+
+  /* Macro watch card (amber) */
+  .stream-card.macro {
+    background: var(--amber-bg);
+    border: 1px solid var(--amber-border);
+    border-left: 4px solid var(--amber);
+  }
+  .stream-card.macro .source { color: var(--amber-2); }
+  .stream-card.macro .source .dot { background: var(--amber); }
+  .stream-card.macro .headline {
+    font-size: 14px;
+    font-weight: 500;
+    color: #5C3E0F;
+    line-height: 1.5;
+    letter-spacing: -0.005em;
+  }
+
+  /* Sizing note card (amber, lighter) */
+  .stream-card.sizing {
+    background: var(--amber-bg-2);
+    border: 1px solid var(--amber-border);
+    border-left: 4px solid var(--amber);
+  }
+  .stream-card.sizing .source { color: var(--amber-2); }
+  .stream-card.sizing .source .dot { background: var(--amber); }
+  .stream-card.sizing .body {
+    font-size: 14px;
+    font-weight: 500;
+    color: #5C3E0F;
+    line-height: 1.5;
+    letter-spacing: -0.005em;
+  }
+  .stream-card.sizing .body strong {
+    font-weight: 700;
+    color: #3E2808;
+  }
+
+  /* Asset signal card */
+  .stream-card.asset .source .dot { background: var(--sage); }
+  .stream-card.asset .top-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .asset-ticker {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    min-width: 76px;
+  }
+  .asset-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px 4px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.2px;
+    background: transparent;
+    color: var(--ink-2);
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .asset-action::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--ink-4);
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  .asset-action.buy {
+    color: var(--sage-2);
+    border-color: var(--sage-border);
+  }
+  .asset-action.buy::before { background: var(--sage); }
+  .asset-action.wait {
+    color: var(--ink-2);
+    border-color: var(--border);
+  }
+  .asset-action.wait::before { background: var(--ink-4); }
+  .asset-action.macro {
+    color: var(--amber-2);
+    border-color: var(--amber-border);
+  }
+  .asset-action.macro::before { background: var(--amber); }
+  .asset-action.sector {
+    color: var(--blue-2);
+    border-color: var(--blue-border);
+  }
+  .asset-action.sector::before { background: var(--blue); }
+  .asset-action .sz {
+    font-weight: 500;
+    color: var(--ink-3);
+  }
+  .asset-action.buy .sz { color: var(--sage); opacity: 0.85; }
+  .asset-reason {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+  .asset-reason em {
+    font-style: normal;
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .asset-entry {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-top: 2px;
+  }
+  .asset-entry .entry-label {
+    font-size: 11px;
+    color: var(--ink-3);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+  .asset-entry .entry-price {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  /* Sector card (blue tint) */
+  .stream-card.sector {
+    background: var(--blue-bg-2);
+    border: 1px solid var(--blue-border);
+    border-left: 4px solid var(--blue);
+  }
+  .stream-card.sector .source { color: var(--blue-2); }
+  .stream-card.sector .source .dot { background: var(--blue); }
+  .stream-card.sector .top-row {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+  }
+  .stream-card.sector .sector-name {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--blue-2);
+    letter-spacing: -0.01em;
+  }
+  .stream-card.sector .trend {
+    font-size: 10.5px;
+    color: var(--blue-2);
+    font-weight: 700;
+    background: var(--card);
+    padding: 3px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.3px;
+    border: 1px solid var(--blue-border);
+  }
+  .stream-card.sector .sector-note {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+
+  /* Section label */
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 22px 4px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .section-label .count {
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    color: var(--ink-4);
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  /* Expandable quiet list */
+  .quiet-list {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    overflow: hidden;
+  }
+  .quiet-item {
+    border-bottom: 1px solid var(--divider);
+  }
+  .quiet-item:last-child { border-bottom: none; }
+
+  .quiet-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 18px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .quiet-row:active { background: var(--bg-2); }
+  .quiet-left { display: flex; align-items: center; gap: 12px; }
+  .quiet-ticker {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    min-width: 60px;
+  }
+  .quiet-status {
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .quiet-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .quiet-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+  }
+  .quiet-dot.sage { background: var(--sage); }
+  .quiet-dot.amber { background: var(--amber); }
+  .quiet-dot.red { background: var(--red); }
+  .quiet-dot.gray { background: var(--ink-4); }
+  .quiet-chev {
+    font-size: 12px;
+    color: var(--ink-4);
+    transition: transform 0.3s ease;
+  }
+  .quiet-item.open .quiet-chev {
+    transform: rotate(90deg);
+  }
+
+  .quiet-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+    background: var(--bg);
+  }
+  .quiet-item.open .quiet-detail {
+    max-height: 320px;
+  }
+  .quiet-detail-inner {
+    padding: 14px 18px 18px;
+    border-top: 1px solid var(--divider);
+  }
+
+  /* ───────── Stack (collapsible groups) ─────────
+     Used in Why tab and Deep dive tab for long lists of watchlist items.
+     Each item shows a compact row (ticker + status) that expands to reveal
+     the full card content on tap. */
+  .stack-group {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .stack-item {
+    border-bottom: 1px solid var(--divider);
+    position: relative;
+  }
+  .stack-item:last-child { border-bottom: none; }
+  .stack-item.sage { border-left: 3px solid var(--sage); }
+  .stack-item.amber { border-left: 3px solid var(--amber); }
+  .stack-item.blue { border-left: 3px solid var(--blue); }
+  .stack-item.red { border-left: 3px solid var(--red); }
+
+  .stack-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 18px 15px 20px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+    gap: 10px;
+  }
+  .stack-row:active { background: var(--bg-2); }
+  .stack-item.sage .stack-row { padding-left: 17px; }
+  .stack-item.amber .stack-row { padding-left: 17px; }
+  .stack-item.blue .stack-row { padding-left: 17px; }
+
+  .stack-ticker-block {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    min-width: 0;
+    flex: 1;
+  }
+  .stack-ticker {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    flex-shrink: 0;
+    line-height: 1.1;
+  }
+  .stack-status {
+    font-size: 13px;
+    color: var(--ink-2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.3;
+  }
+  .stack-item.amber .stack-status { color: var(--amber-2); }
+  .stack-item.blue .stack-status { color: var(--blue-2); }
+
+  /* Why tab: the collapsed row shows a Fraunces ticker column + an italic
+     Fraunces question ("Why is it a buy today?"). The ticker column makes
+     the list scannable (users find META or GOOG in a single glance) while
+     the question carries the conversational voice of the product. */
+  .stack-q-row {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    flex: 1;
+    min-width: 0;
+    padding-right: 8px;
+  }
+  .stack-q-ticker {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    flex-shrink: 0;
+    width: 54px;
+    line-height: 1.2;
+  }
+  .stack-question {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 16px;
+    font-weight: 400;
+    font-style: italic;
+    letter-spacing: -0.005em;
+    color: var(--ink-2);
+    line-height: 1.35;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  /* Accent color on the question text for active signals */
+  .stack-item.sage .stack-q-ticker { color: var(--sage-2); }
+
+  /* Deep dive uses price + % as the collapsed status */
+  .stack-price-block {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .stack-price {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .stack-pct {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .stack-pct.up { color: var(--sage); }
+  .stack-pct.down { color: var(--red); }
+  .stack-pct.flat { color: var(--ink-3); }
+
+  .stack-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .stack-chev {
+    font-size: 14px;
+    color: var(--ink-4);
+    transition: transform 0.3s ease;
+    line-height: 1;
+  }
+  .stack-item.open .stack-chev {
+    transform: rotate(90deg);
+  }
+
+  .stack-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    background: var(--bg);
+  }
+  .stack-item.open .stack-detail {
+    max-height: 900px;
+  }
+  .stack-detail-inner {
+    padding: 14px 18px 18px 20px;
+    border-top: 1px solid var(--divider);
+  }
+  .stack-item.sage .stack-detail-inner { padding-left: 17px; }
+  .stack-item.amber .stack-detail-inner { padding-left: 17px; }
+  .stack-item.blue .stack-detail-inner { padding-left: 17px; }
+
+  /* Inside the detail, paragraphs and tags use the why-card's existing typography.
+     But we need to adjust spacing since there's no card padding wrapper. */
+  .stack-detail-inner p {
+    font-size: 13.5px;
+    color: var(--ink-2);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .stack-detail-inner p:last-child { margin-bottom: 0; }
+  .stack-detail-inner p em {
+    font-style: italic;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .stack-detail-inner .why-tags {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+  }
+
+  /* ───────── Why panel ───────── */
+  .panel-title {
+    padding: 18px 4px 14px;
+  }
+  .panel-title .kicker {
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .panel-title h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+  .panel-title h2 em {
+    font-style: italic;
+    color: var(--sage);
+    font-weight: 500;
+  }
+
+  .why-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 18px;
+    margin-bottom: 12px;
+    border-left: 4px solid var(--border-2);
+  }
+  .why-card.macro {
+    background: var(--amber-bg);
+    border: 1px solid var(--amber-border);
+    border-left: 4px solid var(--amber);
+  }
+  .why-card.sector {
+    background: var(--blue-bg-2);
+    border: 1px solid var(--blue-border);
+    border-left: 4px solid var(--blue);
+  }
+  .why-card.asset {
+    border-left: 4px solid var(--sage);
+  }
+  .why-card.asset.wait {
+    border-left: 4px solid var(--amber);
+  }
+  .why-card.asset.wait .ctx-signal {
+    color: var(--amber-2);
+  }
+
+  .why-card .ctx {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 6px;
+    text-transform: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .why-card .ctx::before {
+    content: '';
+    width: 4px;
+    height: 16px;
+    background: var(--sage);
+    border-radius: 2px;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  .why-card.macro .ctx { color: #5C3E0F; }
+  .why-card.macro .ctx::before { background: var(--amber); }
+  .why-card.sector .ctx { color: var(--blue-2); }
+  .why-card.sector .ctx::before { background: var(--blue); }
+  .why-card.asset.wait .ctx::before { background: var(--amber); }
+  .why-card h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 17px;
+    font-weight: 400;
+    font-style: italic;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+    line-height: 1.3;
+    color: var(--ink-2);
+  }
+  .why-card.macro h3 { color: #5C3E0F; opacity: 0.85; }
+  .why-card.sector h3 { color: var(--blue-2); opacity: 0.85; }
+  .why-card p {
+    font-size: 13.5px;
+    color: var(--ink-2);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .why-card.macro p { color: #5C3E0F; }
+  .why-card.sector p { color: var(--blue-2); }
+  .why-card p:last-child { margin-bottom: 0; }
+  .why-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+  }
+  .why-card.macro .why-tags { border-top-color: rgba(156, 114, 47, 0.25); }
+  .why-card.sector .why-tags { border-top-color: rgba(53, 88, 135, 0.22); }
+  .why-tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px 3px 9px;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink-2);
+    border: 1px solid var(--border);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 0.1px;
+  }
+  .why-tag::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+  .why-card.macro .why-tag {
+    border-color: rgba(156, 114, 47, 0.3);
+    color: var(--amber-2);
+  }
+  .why-card.sector .why-tag {
+    border-color: rgba(53, 88, 135, 0.3);
+    color: var(--blue-2);
+  }
+  .why-tag.pos { border-color: var(--sage-border); color: var(--sage-2); }
+  .why-tag.cau { border-color: var(--amber-border); color: var(--amber-2); }
+  .why-tag.neg { border-color: var(--red-border); color: var(--red); }
+  .why-tag.neu { color: var(--ink-3); border-color: var(--border); }
+  .why-tag.neu::before { opacity: 0.4; }
+  /* Override: macro/sector card tags with specific sentiment keep their sentiment color */
+  .why-card.macro .why-tag.pos { border-color: var(--sage-border); color: var(--sage-2); }
+  .why-card.macro .why-tag.cau { border-color: var(--amber-border); color: var(--amber-2); }
+  .why-card.macro .why-tag.neg { border-color: var(--red-border); color: var(--red); }
+  .why-card.sector .why-tag.pos { border-color: var(--sage-border); color: var(--sage-2); }
+  .why-card.sector .why-tag.cau { border-color: var(--amber-border); color: var(--amber-2); }
+  .why-card.sector .why-tag.neg { border-color: var(--red-border); color: var(--red); }
+
+  /* ───────── Deep panel ───────── */
+  .deep-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 18px;
+    margin-bottom: 12px;
+    border-left: 4px solid var(--border-2);
+  }
+  .deep-card.macro {
+    background: var(--amber-bg);
+    border: 1px solid var(--amber-border);
+    border-left: 4px solid var(--amber);
+  }
+  .deep-card.sector {
+    background: var(--blue-bg-2);
+    border: 1px solid var(--blue-border);
+    border-left: 4px solid var(--blue);
+  }
+  .deep-card.asset {
+    border-left: 4px solid var(--sage);
+  }
+
+  .deep-card .ctx {
+    font-size: 10px;
+    color: var(--ink-3);
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .deep-card.macro .ctx { color: var(--amber-2); }
+  .deep-card.sector .ctx { color: var(--blue-2); }
+
+  .deep-card .ticker-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .deep-card .dticker {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .deep-card.macro .dticker { color: #5C3E0F; }
+  .deep-card.sector .dticker { color: var(--blue-2); }
+  .deep-card .dname {
+    font-size: 11px;
+    color: var(--ink-3);
+    margin-top: 3px;
+  }
+  .deep-card .dprice {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    text-align: right;
+    line-height: 1;
+  }
+  .deep-card .dpct {
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 3px;
+    text-align: right;
+  }
+  .deep-card .dpct.up { color: var(--sage); }
+  .deep-card .dpct.down { color: var(--red); }
+
+  /* Range bar */
+  .range {
+    margin-top: 10px;
+  }
+  .range-label {
+    font-size: 10px;
+    color: var(--ink-3);
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .range-track {
+    position: relative;
+    height: 6px;
+    background: var(--bg-2);
+    border-radius: 3px;
+    overflow: visible;
+  }
+  .range-fill {
+    position: absolute;
+    left: 0; top: 0; height: 100%;
+    background: var(--sage);
+    opacity: 0.25;
+    border-radius: 3px;
+  }
+  .range-marker {
+    position: absolute;
+    top: -3px;
+    width: 12px; height: 12px;
+    background: var(--sage);
+    border-radius: 50%;
+    transform: translateX(-50%);
+    border: 2px solid var(--card);
+    box-shadow: 0 1px 3px rgba(60,105,67,0.3);
+  }
+  .range-current {
+    position: absolute;
+    top: -24px;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    background: var(--card);
+    padding: 1px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    line-height: 1.2;
+  }
+  .range-current::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid var(--border);
+  }
+  .range-ends {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    font-size: 10px;
+    color: var(--ink-3);
+    font-weight: 500;
+  }
+
+  /* RSI gauge */
+  .rsi-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .rsi-label {
+    font-size: 10px;
+    color: var(--ink-3);
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    min-width: 36px;
+  }
+  .rsi-track {
+    flex: 1;
+    height: 6px;
+    background: linear-gradient(to right,
+      var(--sage) 0%, var(--sage) 30%,
+      var(--bg-2) 30%, var(--bg-2) 70%,
+      var(--red) 70%, var(--red) 100%);
+    border-radius: 3px;
+    position: relative;
+    opacity: 0.7;
+  }
+  .rsi-marker {
+    position: absolute;
+    top: -3px;
+    width: 10px; height: 10px;
+    background: var(--ink);
+    border: 2px solid var(--card);
+    border-radius: 50%;
+    transform: translateX(-50%);
+  }
+  .rsi-value {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    min-width: 28px;
+    text-align: right;
+  }
+
+  /* VIX gauge - amber scale */
+  .vix-track {
+    flex: 1;
+    height: 6px;
+    background: linear-gradient(to right,
+      var(--sage) 0%, var(--sage) 25%,
+      var(--bg-2) 25%, var(--bg-2) 55%,
+      var(--amber) 55%, var(--amber) 80%,
+      var(--red) 80%, var(--red) 100%);
+    border-radius: 3px;
+    position: relative;
+    opacity: 0.75;
+  }
+
+  .mech {
+    background: var(--bg-2);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-top: 12px;
+    font-size: 12.5px;
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+  .deep-card.macro .mech { background: rgba(255,255,255,0.5); color: #5C3E0F; }
+  .deep-card.sector .mech { background: rgba(255,255,255,0.5); color: var(--blue-2); }
+  .mech strong {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 500;
+    color: var(--ink);
+    font-style: italic;
+  }
+  .deep-card.macro .mech strong { color: #5C3E0F; }
+  .deep-card.sector .mech strong { color: var(--blue-2); }
+
+  /* News list in deep cards */
+  .news-list {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .deep-card.macro .news-list { border-top-color: rgba(156, 114, 47, 0.25); }
+  .deep-card.sector .news-list { border-top-color: rgba(53, 88, 135, 0.2); }
+
+  .news-label {
+    font-size: 10px;
+    color: var(--ink-3);
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .deep-card.macro .news-label { color: var(--amber-2); }
+  .deep-card.sector .news-label { color: var(--blue-2); }
+
+  .news-item {
+    display: block;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .deep-card.macro .news-item { border-bottom-color: rgba(156, 114, 47, 0.18); }
+  .deep-card.sector .news-item { border-bottom-color: rgba(53, 88, 135, 0.15); }
+  .news-item:last-child { border-bottom: none; }
+  .news-item:active { opacity: 0.6; }
+
+  .news-headline {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.4;
+    margin-bottom: 4px;
+  }
+  .deep-card.macro .news-headline { color: #3E2A0A; }
+  .deep-card.sector .news-headline { color: var(--blue-2); }
+
+  .news-meta {
+    font-size: 10.5px;
+    color: var(--ink-3);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .news-meta .dot-sep {
+    width: 3px; height: 3px; border-radius: 50%;
+    background: var(--ink-4);
+    display: inline-block;
+  }
+  .news-meta .source-name {
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+
+  /* Metric pair */
+  .metric-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .metric-box {
+    background: var(--bg-2);
+    border-radius: 10px;
+    padding: 10px 12px;
+  }
+  .deep-card.macro .metric-box { background: rgba(255,255,255,0.5); }
+  .deep-card.sector .metric-box { background: rgba(255,255,255,0.5); }
+  .metric-box .label {
+    font-size: 9.5px;
+    color: var(--ink-3);
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .metric-box .value {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .metric-box .value .scale {
+    font-family: 'Manrope', sans-serif;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--ink-3);
+    margin-left: 4px;
+  }
+
+  /* ───────── Bottom sheet ───────── */
+  .sheet-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(22, 30, 24, 0);
+    z-index: 100;
+    pointer-events: none;
+    transition: background 0.3s ease;
+  }
+  .sheet-backdrop.open {
+    background: rgba(22, 30, 24, 0.4);
+    pointer-events: auto;
+  }
+  .sheet {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    background: var(--bg);
+    border-top-left-radius: 28px;
+    border-top-right-radius: 28px;
+    z-index: 101;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    max-height: 88%;
+    overflow-y: auto;
+    box-shadow: 0 -10px 40px rgba(22,30,24,0.2);
+  }
+  .sheet.open { transform: translateY(0); }
+  .sheet::-webkit-scrollbar { display: none; }
+
+  .sheet-grabber {
+    width: 40px; height: 4px;
+    background: var(--ink-4);
+    opacity: 0.5;
+    border-radius: 2px;
+    margin: 10px auto 0;
+  }
+  .sheet-close {
+    position: absolute;
+    top: 16px; right: 18px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--bg-2);
+    border: none;
+    font-size: 15px;
+    color: var(--ink-2);
+    cursor: pointer;
+    font-weight: 500;
+    -webkit-tap-highlight-color: transparent;
+    z-index: 2;
+  }
+  .sheet-body { padding: 22px 24px 100px; }
+
+  .sheet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .sheet-header-left { flex: 1; min-width: 0; }
+  .sheet-header-right {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .sheet-ticker {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 36px;
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+  .sheet-name {
+    font-size: 12px;
+    color: var(--ink-3);
+  }
+  .sheet-price {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-top: 12px; /* align roughly with sheet-name baseline */
+  }
+  .sheet-price-change {
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+  .sheet-price-change.up { color: var(--sage); }
+  .sheet-price-change.down { color: var(--red); }
+  .sheet-action-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  /* Entry info: keeps label and price values together as one visual unit
+     so they don't get separated by wrapping. */
+  .entry-info {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .entry-info-label {
+    font-family: 'Manrope', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .entry-range {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    font-family: 'Fraunces', Georgia, serif;
+  }
+  .entry-range .price {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+  }
+  .entry-range .dash {
+    color: var(--ink-4);
+    font-weight: 300;
+  }
+  .sheet-reason {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.35;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .sheet-section { margin-bottom: 22px; }
+  .sheet-section-label {
+    font-size: 10px;
+    color: var(--ink-3);
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .mute-bar {
+    display: flex; gap: 8px; margin-top: 18px;
+  }
+  .mute-btn {
+    flex: 1;
+    padding: 12px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mute-btn:active { transform: scale(0.98); }
+  .mute-btn.muted {
+    background: var(--sage-bg);
+    color: var(--sage-2);
+    border-color: var(--sage-border);
+  }
+
+  /* ───────── Settings modal (full-screen inside phone) ───────── */
+  .settings-modal {
+    position: absolute;
+    inset: 0;
+    background: var(--bg);
+    z-index: 150;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .settings-modal::-webkit-scrollbar { display: none; }
+  .settings-modal.open {
+    transform: translateY(0);
+  }
+  .settings-topbar {
+    padding: 18px 20px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+  .settings-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 22px;
+    font-weight: 500;
+    font-style: italic;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .settings-close {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    color: var(--ink-2);
+    font-size: 18px;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+    line-height: 1;
+  }
+  .settings-close:active { transform: scale(0.95); }
+  .settings-body { padding: 20px 20px 120px; }
+
+  .settings-section { margin-bottom: 28px; }
+  .settings-section-label {
+    font-size: 10px;
+    color: var(--ink-3);
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    padding-left: 4px;
+  }
+
+  .settings-group {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    overflow: hidden;
+  }
+  .settings-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    min-height: 54px;
+    gap: 12px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .settings-row + .settings-row {
+    border-top: 1px solid var(--divider);
+  }
+  .settings-row.tappable { cursor: pointer; }
+  .settings-row.tappable:active { background: var(--bg-2); }
+  .settings-row-main { flex: 1; min-width: 0; }
+  .settings-row-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .settings-row-sub {
+    font-size: 12px;
+    color: var(--ink-3);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+  .settings-row-value {
+    font-size: 13px;
+    color: var(--ink-2);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .settings-row-chev {
+    color: var(--ink-4);
+    font-size: 14px;
+  }
+
+  /* Toggle switch */
+  .toggle {
+    position: relative;
+    width: 40px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+  .toggle input {
+    opacity: 0;
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    z-index: 2;
+  }
+  .toggle-track {
+    position: absolute;
+    inset: 0;
+    background: var(--ink-4);
+    border-radius: 12px;
+    transition: background 0.2s ease;
+  }
+  .toggle-thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px; height: 20px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .toggle input:checked ~ .toggle-track { background: var(--sage); }
+  .toggle input:checked ~ .toggle-thumb { transform: translateX(16px); }
+
+  /* Watchlist editor */
+  .watchlist-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    gap: 10px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .watchlist-row + .watchlist-row { border-top: 1px solid var(--divider); }
+  .watchlist-row-left {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+  }
+  .watchlist-ticker {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    min-width: 58px;
+  }
+  .watchlist-name {
+    font-size: 12px;
+    color: var(--ink-3);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .watchlist-remove {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--ink-3);
+    font-size: 16px;
+    line-height: 1;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .watchlist-remove:active {
+    background: var(--red-bg);
+    color: var(--red);
+    border-color: var(--red-border);
+    transform: scale(0.92);
+  }
+  .watchlist-add {
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-top: 1px dashed var(--border);
+    background: var(--bg-2);
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
+  }
+  .watchlist-add:active { background: var(--surface-container-low, var(--bg-2)); }
+  .watchlist-add-plus {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--sage-bg);
+    color: var(--sage-2);
+    font-size: 18px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 300;
+    flex-shrink: 0;
+  }
+  .watchlist-add-label {
+    font-size: 13px;
+    color: var(--ink-2);
+    font-weight: 500;
+  }
+
+  /* Account block */
+  .account-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 18px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .account-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--sage-bg);
+    color: var(--sage-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 18px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+  .account-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .account-email {
+    font-size: 12px;
+    color: var(--ink-3);
+  }
+  .account-plan-tag {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: var(--sage-bg);
+    color: var(--sage-2);
+  }
+
+  /* Calm day */
+  .calm-state {
+    text-align: center;
+    padding: 40px 20px 30px;
+  }
+  .calm-icon {
+    font-size: 36px;
+    margin-bottom: 14px;
+    display: inline-block;
+    color: var(--ink-4);
+  }
+  .calm-headline {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 24px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.25;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+  .calm-sub {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.5;
+    max-width: 260px;
+    margin: 0 auto;
+  }
+
+  /* Wealth wisdom card */
+  .wisdom-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 24px 22px 22px;
+    margin: 8px 0 6px;
+    position: relative;
+  }
+  .wisdom-label {
+    font-size: 10px;
+    color: var(--ink-3);
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .wisdom-label::before {
+    content: '';
+    width: 4px;
+    height: 14px;
+    background: var(--sage);
+    border-radius: 2px;
+    display: inline-block;
+  }
+  .wisdom-quote {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 18px;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.45;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    text-wrap: balance;
+  }
+  .wisdom-quote::before {
+    content: '“';
+    font-size: 32px;
+    line-height: 0;
+    vertical-align: -8px;
+    margin-right: 2px;
+    color: var(--sage);
+    opacity: 0.5;
+  }
+  .wisdom-quote::after {
+    content: '”';
+    font-size: 32px;
+    line-height: 0;
+    vertical-align: -14px;
+    margin-left: 1px;
+    color: var(--sage);
+    opacity: 0.5;
+  }
+  .wisdom-author {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-2);
+    letter-spacing: 0.2px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .wisdom-author::before {
+    content: '—';
+    color: var(--ink-4);
+    font-weight: 400;
+  }
+
+  /* Demo toggle */
+  .demo-toggle {
+    position: fixed;
+    top: 32px; right: 32px;
+    z-index: 1000;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink-2);
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .demo-toggle .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--sage);
+  }
+
+  .stream-card, .quiet-list, .section-label,
+  .why-card, .deep-card {
+    animation: fadeUp 0.4s ease backwards;
+  }
+  .stream-card:nth-child(1), .why-card:nth-child(1), .deep-card:nth-child(1) { animation-delay: 0.05s; }
+  .stream-card:nth-child(2), .why-card:nth-child(2), .deep-card:nth-child(2) { animation-delay: 0.1s; }
+  .stream-card:nth-child(3), .why-card:nth-child(3), .deep-card:nth-child(3) { animation-delay: 0.15s; }
+  .stream-card:nth-child(4), .why-card:nth-child(4), .deep-card:nth-child(4) { animation-delay: 0.2s; }
+  .stream-card:nth-child(5), .why-card:nth-child(5), .deep-card:nth-child(5) { animation-delay: 0.25s; }
+</style>
+</head>
+<body>
+
+<button class="demo-toggle" onclick="toggleCalm()">
+  <span class="dot"></span>
+  <span id="demoLabel">Active day</span>
+</button>
+
+<div class="phone">
+  <div class="status-bar">
+    <span class="time">08:18</span>
+    <div class="status-icons">
+      <span>●●●●</span><span>􀙇</span><span>􀛨</span>
+    </div>
+  </div>
+  <div class="island"></div>
+
+  <div class="screen" id="screen">
+
+    <!-- Header -->
+    <div class="app-header">
+      <div>
+        <div class="greeting">Good morning, Amy</div>
+        <h1>InvestAssist</h1>
+      </div>
+      <div class="app-header-right">
+        <div class="date">
+          Mar 7
+          <span class="day">Friday</span>
+          <span class="updated">Updated 10:30</span>
+        </div>
+        <button class="settings-btn" onclick="openSettings()" aria-label="Settings">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- TAB 1 — TO DO                            -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="panel active" id="panel-todo">
+
+      <div id="activeDayContent">
+        <div class="panel-title">
+          <div class="kicker">For today</div>
+          <h2>What needs your <em>attention</em>.</h2>
+        </div>
+
+        <!-- Macro watch -->
+        <div class="stream-card macro" onclick="openSheet('macro')">
+          <div class="source">
+            <span class="dot"></span>Market mood
+          </div>
+          <div class="chev">›</div>
+          <div class="headline">Cautious — the market may be close to a turnaround.</div>
+        </div>
+
+        <!-- Sizing note -->
+        <div class="stream-card sizing" onclick="openSheet('sizing')">
+          <div class="source">
+            <span class="dot"></span>How much to buy
+          </div>
+          <div class="chev">›</div>
+          <div class="body">Today, <strong>keep your buys to a medium size</strong> — not your full budget.</div>
+        </div>
+
+        <!-- Asset: ASML -->
+        <div class="stream-card asset" onclick="openSheet('asml')">
+          <div class="source">
+            <span class="dot"></span>Your watchlist
+          </div>
+          <div class="chev">›</div>
+          <div class="top-row">
+            <span class="asset-ticker">ASML</span>
+            <span class="asset-action buy">Buy <span class="sz">· Medium</span></span>
+          </div>
+          <div class="asset-entry">
+            <span class="entry-label">Entry</span>
+            <span class="entry-price">€605 — €620</span>
+          </div>
+        </div>
+
+        <!-- Asset: GRAB -->
+        <div class="stream-card asset" onclick="openSheet('grab')">
+          <div class="source">
+            <span class="dot"></span>Your watchlist
+          </div>
+          <div class="chev">›</div>
+          <div class="top-row">
+            <span class="asset-ticker">GRAB</span>
+            <span class="asset-action buy">Buy <span class="sz">· Medium</span></span>
+          </div>
+          <div class="asset-entry">
+            <span class="entry-label">Entry</span>
+            <span class="entry-price">$4.05 — $4.20</span>
+          </div>
+        </div>
+
+        <!-- Sector note -->
+        <div class="stream-card sector" onclick="openSheet('sector')">
+          <div class="source">
+            <span class="dot"></span>Sector to watch
+          </div>
+          <div class="chev">›</div>
+          <div class="top-row">
+            <span class="sector-name">Semiconductors</span>
+            <span class="trend">Weakening</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Calm day -->
+      <div id="calmDayContent" style="display:none;">
+        <div class="calm-state">
+          <div class="calm-icon">◯</div>
+          <div class="calm-headline">Nothing to do today.</div>
+          <div class="calm-sub">
+            The market is balanced — nothing worth buying, nothing to worry about.<br>
+            Patience is the strategy.
+          </div>
+        </div>
+
+        <div class="wisdom-card">
+          <div class="wisdom-label">Wealth wisdom</div>
+          <div class="wisdom-quote">The stock market is a device for transferring money from the impatient to the patient.</div>
+          <div class="wisdom-author">Warren Buffett</div>
+        </div>
+
+        <div class="section-label">
+          Your watchlist
+          <span class="count">— all quiet</span>
+        </div>
+
+        <div class="quiet-list">
+          <!-- ASML calm -->
+          <div class="quiet-item">
+            <div class="quiet-row" onclick="toggleQuiet(this.parentElement)">
+              <div class="quiet-left">
+                <span class="quiet-ticker">ASML</span>
+                <span class="quiet-status">steady</span>
+              </div>
+              <div class="quiet-right">
+                <span class="quiet-dot gray"></span>
+                <span class="quiet-chev">›</span>
+              </div>
+            </div>
+            <div class="quiet-detail">
+              <div class="quiet-detail-inner">
+                <div class="range">
+                  <div class="range-label">Recent range (45 days)</div>
+                  <div class="range-track">
+                    <div class="range-fill" style="width:48%;background:var(--ink-3);"></div>
+                    <div class="range-marker" style="left:48%;background:var(--ink-3);"></div>
+                  </div>
+                  <div class="range-ends">
+                    <span>€598 (low)</span>
+                    <span>€742 (high)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- GRAB calm -->
+          <div class="quiet-item">
+            <div class="quiet-row" onclick="toggleQuiet(this.parentElement)">
+              <div class="quiet-left">
+                <span class="quiet-ticker">GRAB</span>
+                <span class="quiet-status">coiling up</span>
+              </div>
+              <div class="quiet-right">
+                <span class="quiet-dot gray"></span>
+                <span class="quiet-chev">›</span>
+              </div>
+            </div>
+            <div class="quiet-detail">
+              <div class="quiet-detail-inner">
+                <div class="range">
+                  <div class="range-label">Recent range (45 days)</div>
+                  <div class="range-track">
+                    <div class="range-fill" style="width:32%;background:var(--ink-3);"></div>
+                    <div class="range-marker" style="left:32%;background:var(--ink-3);"></div>
+                  </div>
+                  <div class="range-ends">
+                    <span>$4.02 (low)</span>
+                    <span>$5.18 (high)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- NVDA calm -->
+          <div class="quiet-item">
+            <div class="quiet-row" onclick="toggleQuiet(this.parentElement)">
+              <div class="quiet-left">
+                <span class="quiet-ticker">NVDA</span>
+                <span class="quiet-status">settling</span>
+              </div>
+              <div class="quiet-right">
+                <span class="quiet-dot gray"></span>
+                <span class="quiet-chev">›</span>
+              </div>
+            </div>
+            <div class="quiet-detail">
+              <div class="quiet-detail-inner">
+                <div class="range">
+                  <div class="range-label">Recent range (45 days)</div>
+                  <div class="range-track">
+                    <div class="range-fill" style="width:52%;background:var(--ink-3);"></div>
+                    <div class="range-marker" style="left:52%;background:var(--ink-3);"></div>
+                  </div>
+                  <div class="range-ends">
+                    <span>$98 (low)</span>
+                    <span>$142 (high)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SPY calm -->
+          <div class="quiet-item">
+            <div class="quiet-row" onclick="toggleQuiet(this.parentElement)">
+              <div class="quiet-left">
+                <span class="quiet-ticker">SPY</span>
+                <span class="quiet-status">steady</span>
+              </div>
+              <div class="quiet-right">
+                <span class="quiet-dot gray"></span>
+                <span class="quiet-chev">›</span>
+              </div>
+            </div>
+            <div class="quiet-detail">
+              <div class="quiet-detail-inner">
+                <div class="range">
+                  <div class="range-label">Recent range (45 days)</div>
+                  <div class="range-track">
+                    <div class="range-fill" style="width:58%;background:var(--ink-3);"></div>
+                    <div class="range-marker" style="left:58%;background:var(--ink-3);"></div>
+                  </div>
+                  <div class="range-ends">
+                    <span>$512 (low)</span>
+                    <span>$578 (high)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- META calm -->
+          <div class="quiet-item">
+            <div class="quiet-row" onclick="toggleQuiet(this.parentElement)">
+              <div class="quiet-left">
+                <span class="quiet-ticker">META</span>
+                <span class="quiet-status">drifting</span>
+              </div>
+              <div class="quiet-right">
+                <span class="quiet-dot gray"></span>
+                <span class="quiet-chev">›</span>
+              </div>
+            </div>
+            <div class="quiet-detail">
+              <div class="quiet-detail-inner">
+                <div class="range">
+                  <div class="range-label">Recent range (45 days)</div>
+                  <div class="range-track">
+                    <div class="range-fill" style="width:62%;background:var(--ink-3);"></div>
+                    <div class="range-marker" style="left:62%;background:var(--ink-3);"></div>
+                  </div>
+                  <div class="range-ends">
+                    <span>$478 (low)</span>
+                    <span>$602 (high)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- TAB 2 — WHY                              -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="panel" id="panel-why">
+
+      <div class="panel-title">
+        <div class="kicker">Interpretation</div>
+        <h2>Why today looks this way.</h2>
+      </div>
+
+      <div id="activeDayContent-why">
+      <!-- ─── MACRO ─── -->
+      <div class="section-label">
+        Macro
+      </div>
+
+      <div class="why-card macro">
+        <div class="ctx">Market mood</div>
+        <h3>Is the market about to bottom?</h3>
+        <p>
+          Maybe — but we can't tell yet. After three weeks of heavy selling,
+          the drop has started to slow down, and the fear gauge (the VIX) is
+          high but no longer climbing. That mix has led to a turnaround before,
+          but it's also <em>led to more selling</em>. That's why we're only
+          letting you buy in medium sizes today — we want to start easing in,
+          not bet the farm.
+        </p>
+        <div class="why-tags">
+          <span class="why-tag pos">selling is slowing</span>
+          <span class="why-tag cau">fear still high</span>
+          <span class="why-tag pos">a floor may be forming</span>
+        </div>
+      </div>
+
+      <!-- ─── SECTOR ─── -->
+      <div class="section-label">
+        Sector
+      </div>
+
+      <div class="why-card sector">
+        <div class="ctx">Semiconductors</div>
+        <h3>Why are my chip stocks weak today?</h3>
+        <p>
+          This isn't about any one company — the whole chip sector is having a
+          rough stretch. After two years of heavy spending on AI, big tech is
+          pausing to figure out what it actually needs next, and higher interest
+          rates are hurting companies that borrow a lot. Your ASML signal is
+          forming <em>despite</em> this, which is exactly why we're keeping the
+          buy size conservative.
+        </p>
+        <div class="why-tags">
+          <span class="why-tag neg">sector is weak</span>
+          <span class="why-tag cau">AI spending paused</span>
+          <span class="why-tag cau">interest rates biting</span>
+        </div>
+      </div>
+
+      <!-- ─── YOUR WATCHLIST ─── -->
+      <div class="section-label">
+        Your watchlist
+      </div>
+
+      <div class="stack-group">
+
+        <div class="stack-item sage" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-q-row"><span class="stack-q-ticker">ASML</span><span class="stack-question">Why is it a buy today?</span></div>
+            <span class="stack-chev">›</span>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <p>
+                It's dropped close to the lowest price it's traded at in the
+                last two months — and it's <em>stopped going down</em>. That's
+                the first hint that buyers are showing up. The longer-term
+                trend is still weak though, which is why we're suggesting
+                medium, not large. You're starting a position, not betting the
+                whole budget.
+              </p>
+              <div class="why-tags">
+                <span class="why-tag pos">priced low</span>
+                <span class="why-tag pos">starting to turn</span>
+                <span class="why-tag cau">trend still weak</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-item sage" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-q-row"><span class="stack-q-ticker">GRAB</span><span class="stack-question">Why is it a buy today?</span></div>
+            <span class="stack-chev">›</span>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <p>
+                This looks like more than a quick bounce. Over the last week,
+                the days GRAB went up had much <em>more trading activity</em>
+                than the days it went down — that usually means real buyers
+                are stepping in, not traders just taking small profits. With
+                the price still near recent lows, this is one of the cleaner
+                set-ups we've seen.
+              </p>
+              <div class="why-tags">
+                <span class="why-tag pos">priced low</span>
+                <span class="why-tag pos">real buying</span>
+                <span class="why-tag pos">finding its footing</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-item amber" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-q-row"><span class="stack-q-ticker">SPY</span><span class="stack-question">Why no signal?</span></div>
+            <span class="stack-chev">›</span>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <p>
+                It's near the low of its recent range and just starting to
+                steady — so it's close. But we want to see more buyers stepping
+                in before calling it a signal. One to watch this week.
+              </p>
+              <div class="why-tags">
+                <span class="why-tag pos">priced low</span>
+                <span class="why-tag cau">not yet convincing</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-item amber" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-q-row"><span class="stack-q-ticker">NVDA</span><span class="stack-question">Why no signal?</span></div>
+            <span class="stack-chev">›</span>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <p>
+                It's still dropping, with no sign buyers are stepping in yet.
+                Trying to catch a stock on the way down usually costs you —
+                we'd rather wait for the drop to stop before we take a look.
+              </p>
+              <div class="why-tags">
+                <span class="why-tag neg">still falling</span>
+                <span class="why-tag cau">big swings</span>
+                <span class="why-tag neg">no buyers yet</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-item amber" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-q-row"><span class="stack-q-ticker">META</span><span class="stack-question">Why no signal?</span></div>
+            <span class="stack-chev">›</span>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <p>
+                It's bouncing off recent lows, but trading activity is light —
+                which means not many people are actually buying. That kind of
+                bounce often gives back its gains a few days later. Skipping
+                for now.
+              </p>
+              <div class="why-tags">
+                <span class="why-tag cau">small bounce</span>
+                <span class="why-tag neg">few real buyers</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-item amber" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-q-row"><span class="stack-q-ticker">GOOG</span><span class="stack-question">Why no signal?</span></div>
+            <span class="stack-chev">›</span>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <p>
+                GOOG is doing great — and that's exactly why we're not buying.
+                It's trading near its two-month high, so you'd be paying top
+                price. A good signal would need a meaningful dip first. Worth
+                the wait.
+              </p>
+              <div class="why-tags">
+                <span class="why-tag pos">strong</span>
+                <span class="why-tag neu">priced high</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-item amber" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-q-row"><span class="stack-q-ticker">GLD</span><span class="stack-question">Why is gold holding up?</span></div>
+            <span class="stack-chev">›</span>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <p>
+                When stocks get shaky, people often buy gold as a safer place
+                to park money — that's what's happening now. It's not cheap
+                enough to buy today, but worth keeping an eye on: if stock
+                weakness continues, gold may keep climbing.
+              </p>
+              <div class="why-tags">
+                <span class="why-tag pos">safe-haven buying</span>
+                <span class="why-tag neu">priced high</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      </div><!-- /activeDayContent-why -->
+
+      <!-- ═══════════ CALM DAY — WHY ═══════════ -->
+      <div id="calmDayContent-why" style="display:none;">
+
+        <!-- ─── MACRO ─── -->
+        <div class="section-label">
+          Macro
+        </div>
+
+        <div class="why-card macro">
+          <div class="ctx">Market mood</div>
+          <h3>What's the market doing?</h3>
+          <p>
+            Not much — and that's fine. The market isn't particularly choppy,
+            investors aren't especially fearful or greedy, and there's no big
+            trend pushing everything one way. No wave to ride, nothing
+            collapsing. This is a <em>patience day</em>. The best move today
+            is usually no move.
+          </p>
+          <div class="why-tags">
+            <span class="why-tag neu">balanced</span>
+            <span class="why-tag neu">normal conditions</span>
+            <span class="why-tag neu">nothing to act on</span>
+          </div>
+        </div>
+
+        <!-- ─── SECTOR ─── -->
+        <div class="section-label">
+          Sector
+        </div>
+
+        <div class="why-card sector">
+          <div class="ctx">Semiconductors</div>
+          <h3>Any sector to watch?</h3>
+          <p>
+            Not really. Chip stocks are drifting sideways — there's no clear
+            trend pulling the whole group up or down. Stocks are moving on
+            their own company news rather than a sector-wide story. Nothing
+            to worry about today.
+          </p>
+          <div class="why-tags">
+            <span class="why-tag neu">drifting</span>
+            <span class="why-tag neu">no clear trend</span>
+          </div>
+        </div>
+
+        <!-- ─── YOUR WATCHLIST ─── -->
+        <div class="section-label">
+          Your watchlist
+        </div>
+
+        <div class="stack-group">
+
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-q-row"><span class="stack-q-ticker">ASML</span><span class="stack-question">What's it doing?</span></div>
+              <span class="stack-chev">›</span>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <p>
+                  Sitting quietly in the middle of its recent price range, with
+                  no clear direction. Neither a good buy nor a reason to worry
+                  — just steady.
+                </p>
+                <div class="why-tags">
+                  <span class="why-tag neu">middle of range</span>
+                  <span class="why-tag neu">steady</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-q-row"><span class="stack-q-ticker">GRAB</span><span class="stack-question">What's it doing?</span></div>
+              <span class="stack-chev">›</span>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <p>
+                  Price swings have gotten small. That <em>sometimes</em> comes
+                  right before a bigger move in either direction, so worth
+                  keeping on your radar — but nothing to do today.
+                </p>
+                <div class="why-tags">
+                  <span class="why-tag neu">coiled up</span>
+                  <span class="why-tag pos">building a base</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-q-row"><span class="stack-q-ticker">SPY</span><span class="stack-question">What's it doing?</span></div>
+              <span class="stack-chev">›</span>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <p>
+                  Trading around the middle of its recent price range. The
+                  broader market is balanced — no strong push up or down.
+                  Nothing stands out.
+                </p>
+                <div class="why-tags">
+                  <span class="why-tag neu">middle of range</span>
+                  <span class="why-tag neu">balanced</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-q-row"><span class="stack-q-ticker">NVDA</span><span class="stack-question">What's it doing?</span></div>
+              <span class="stack-chev">›</span>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <p>
+                  Calming down after some bigger swings. The price is settling
+                  into a narrower range — usually this eventually resolves one
+                  way or the other, but not today.
+                </p>
+                <div class="why-tags">
+                  <span class="why-tag neu">settling</span>
+                  <span class="why-tag neu">narrow range</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-q-row"><span class="stack-q-ticker">META</span><span class="stack-question">What's it doing?</span></div>
+              <span class="stack-chev">›</span>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <p>
+                  Trading activity is light and there's no clear direction —
+                  just drifting. Normal for a quiet day. Nothing shaping up.
+                </p>
+                <div class="why-tags">
+                  <span class="why-tag neu">quiet</span>
+                  <span class="why-tag neu">drifting</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-q-row"><span class="stack-q-ticker">GOOG</span><span class="stack-question">What's it doing?</span></div>
+              <span class="stack-chev">›</span>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <p>
+                  Still strong, still expensive. No discount to buy into, no
+                  sign of trouble either. It's been doing its thing without
+                  making a fuss.
+                </p>
+                <div class="why-tags">
+                  <span class="why-tag pos">strong</span>
+                  <span class="why-tag neu">priced high</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-q-row"><span class="stack-q-ticker">GLD</span><span class="stack-question">What's gold doing?</span></div>
+              <span class="stack-chev">›</span>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <p>
+                  Holding near recent highs with steady demand. Not cheap, but
+                  not weakening either. Quiet.
+                </p>
+                <div class="why-tags">
+                  <span class="why-tag pos">steady</span>
+                  <span class="why-tag neu">priced high</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div><!-- /calmDayContent-why -->
+
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- TAB 3 — DEEP DIVE                        -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="panel" id="panel-deep">
+
+      <div class="panel-title">
+        <div class="kicker">Reference</div>
+        <h2>Markets at a <em>glance</em>.</h2>
+      </div>
+
+      <div id="activeDayContent-deep">
+      <!-- ─── INDICES ─── -->
+      <div class="section-label">
+        Indices
+      </div>
+
+      <div class="stack-group">
+
+        <div class="stack-item amber" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-ticker-block">
+              <span class="stack-ticker">S&P 500</span>
+            </div>
+            <div class="stack-right">
+              <div class="stack-price-block">
+                <span class="stack-price">5,612</span>
+                <span class="stack-pct down">−0.4%</span>
+              </div>
+              <span class="stack-chev">›</span>
+            </div>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <div class="range">
+                <div class="range-label">Recent range (45 days)</div>
+                <div class="range-track">
+                  <div class="range-fill" style="width:24%;background:var(--amber);"></div>
+                  <div class="range-marker" style="left:24%;background:var(--amber);"></div>
+                </div>
+                <div class="range-ends">
+                  <span>5,489 (low)</span>
+                  <span>5,998 (high)</span>
+                </div>
+              </div>
+              <div class="news-list">
+                <div class="news-label">In the news</div>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Stocks slide for third straight session as growth concerns mount</div>
+                  <div class="news-meta"><span class="source-name">Reuters</span><span class="dot-sep"></span><span>2h ago</span></div>
+                </a>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Fed minutes signal patience on rates amid market turbulence</div>
+                  <div class="news-meta"><span class="source-name">Bloomberg</span><span class="dot-sep"></span><span>4h ago</span></div>
+                </a>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Defensive sectors outperform as investors rotate out of growth</div>
+                  <div class="news-meta"><span class="source-name">WSJ</span><span class="dot-sep"></span><span>6h ago</span></div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-item amber" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-ticker-block">
+              <span class="stack-ticker">NASDAQ</span>
+            </div>
+            <div class="stack-right">
+              <div class="stack-price-block">
+                <span class="stack-price">17,842</span>
+                <span class="stack-pct down">−0.6%</span>
+              </div>
+              <span class="stack-chev">›</span>
+            </div>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <div class="range">
+                <div class="range-label">Recent range (45 days)</div>
+                <div class="range-track">
+                  <div class="range-fill" style="width:18%;background:var(--amber);"></div>
+                  <div class="range-marker" style="left:18%;background:var(--amber);"></div>
+                </div>
+                <div class="range-ends">
+                  <span>17,490 (low)</span>
+                  <span>19,640 (high)</span>
+                </div>
+              </div>
+              <div class="news-list">
+                <div class="news-label">In the news</div>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Nasdaq leads decline as megacap tech sells off</div>
+                  <div class="news-meta"><span class="source-name">Bloomberg</span><span class="dot-sep"></span><span>3h ago</span></div>
+                </a>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">AI stocks cool as investors question capex pace</div>
+                  <div class="news-meta"><span class="source-name">Financial Times</span><span class="dot-sep"></span><span>5h ago</span></div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-item amber" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-ticker-block">
+              <span class="stack-ticker">Dow Jones</span>
+            </div>
+            <div class="stack-right">
+              <div class="stack-price-block">
+                <span class="stack-price">41,980</span>
+                <span class="stack-pct down">−0.3%</span>
+              </div>
+              <span class="stack-chev">›</span>
+            </div>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <div class="range">
+                <div class="range-label">Recent range (45 days)</div>
+                <div class="range-track">
+                  <div class="range-fill" style="width:34%;background:var(--amber);"></div>
+                  <div class="range-marker" style="left:34%;background:var(--amber);"></div>
+                </div>
+                <div class="range-ends">
+                  <span>41,120 (low)</span>
+                  <span>43,600 (high)</span>
+                </div>
+              </div>
+              <div class="news-list">
+                <div class="news-label">In the news</div>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Blue chips hold up better as rotation into defensives continues</div>
+                  <div class="news-meta"><span class="source-name">WSJ</span><span class="dot-sep"></span><span>3h ago</span></div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-item amber" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-ticker-block">
+              <span class="stack-ticker">Russell 2000</span>
+            </div>
+            <div class="stack-right">
+              <div class="stack-price-block">
+                <span class="stack-price">2,148</span>
+                <span class="stack-pct down">−0.9%</span>
+              </div>
+              <span class="stack-chev">›</span>
+            </div>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <div class="range">
+                <div class="range-label">Recent range (45 days)</div>
+                <div class="range-track">
+                  <div class="range-fill" style="width:12%;background:var(--amber);"></div>
+                  <div class="range-marker" style="left:12%;background:var(--amber);"></div>
+                </div>
+                <div class="range-ends">
+                  <span>2,112 (low)</span>
+                  <span>2,420 (high)</span>
+                </div>
+              </div>
+              <div class="news-list">
+                <div class="news-label">In the news</div>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Small caps lead losses as rate-sensitive sectors retreat</div>
+                  <div class="news-meta"><span class="source-name">Reuters</span><span class="dot-sep"></span><span>5h ago</span></div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ─── SENTIMENT ─── -->
+      <div class="section-label">
+        Sentiment
+      </div>
+
+      <div class="stack-group">
+        <div class="stack-item amber" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-ticker-block">
+              <span class="stack-ticker">VIX</span>
+              <span class="stack-status">fear gauge</span>
+            </div>
+            <div class="stack-right">
+              <div class="stack-price-block">
+                <span class="stack-price">30</span>
+                <span class="stack-pct" style="color:var(--amber-2);">very high</span>
+              </div>
+              <span class="stack-chev">›</span>
+            </div>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <div class="rsi-row">
+                <span class="rsi-label">Level</span>
+                <div class="vix-track"><div class="rsi-marker" style="left:68%;"></div></div>
+                <span class="rsi-value">30</span>
+              </div>
+              <div class="range-ends" style="margin-top:6px;">
+                <span>calm (12)</span>
+                <span>panic (40+)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── COMMODITIES ─── -->
+      <div class="section-label">
+        Commodities
+      </div>
+
+      <div class="stack-group">
+
+        <div class="stack-item amber" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-ticker-block">
+              <span class="stack-ticker">Gold</span>
+            </div>
+            <div class="stack-right">
+              <div class="stack-price-block">
+                <span class="stack-price">$2,648</span>
+                <span class="stack-pct up">+0.5%</span>
+              </div>
+              <span class="stack-chev">›</span>
+            </div>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <div class="range">
+                <div class="range-label">Recent range (45 days)</div>
+                <div class="range-track">
+                  <div class="range-fill" style="width:72%;background:var(--sage);opacity:0.3;"></div>
+                  <div class="range-marker" style="left:72%;"></div>
+                </div>
+                <div class="range-ends">
+                  <span>$2,540 (low)</span>
+                  <span>$2,695 (high)</span>
+                </div>
+              </div>
+              <div class="news-list">
+                <div class="news-label">In the news</div>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Gold holds near record as haven demand lifts prices</div>
+                  <div class="news-meta"><span class="source-name">Reuters</span><span class="dot-sep"></span><span>1h ago</span></div>
+                </a>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Central bank buying continues to underpin gold's rally</div>
+                  <div class="news-meta"><span class="source-name">Financial Times</span><span class="dot-sep"></span><span>8h ago</span></div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-item amber" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-ticker-block">
+              <span class="stack-ticker">Crude Oil</span>
+            </div>
+            <div class="stack-right">
+              <div class="stack-price-block">
+                <span class="stack-price">$71.40</span>
+                <span class="stack-pct down">−1.2%</span>
+              </div>
+              <span class="stack-chev">›</span>
+            </div>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <div class="range">
+                <div class="range-label">Recent range (45 days)</div>
+                <div class="range-track">
+                  <div class="range-fill" style="width:22%;background:var(--amber);"></div>
+                  <div class="range-marker" style="left:22%;background:var(--amber);"></div>
+                </div>
+                <div class="range-ends">
+                  <span>$69.80 (low)</span>
+                  <span>$79.20 (high)</span>
+                </div>
+              </div>
+              <div class="news-list">
+                <div class="news-label">In the news</div>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Crude falls on weaker demand signals from China</div>
+                  <div class="news-meta"><span class="source-name">Bloomberg</span><span class="dot-sep"></span><span>2h ago</span></div>
+                </a>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">OPEC+ holds output steady ahead of Q2 review</div>
+                  <div class="news-meta"><span class="source-name">Reuters</span><span class="dot-sep"></span><span>1d ago</span></div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ─── SECTORS ─── -->
+      <div class="section-label">
+        Sectors on your watchlist
+      </div>
+
+      <div class="stack-group">
+        <div class="stack-item blue" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-ticker-block">
+              <span class="stack-ticker">SOXX</span>
+              <span class="stack-status">Semiconductors</span>
+            </div>
+            <div class="stack-right">
+              <div class="stack-price-block">
+                <span class="stack-price">$198.40</span>
+                <span class="stack-pct down">−1.1%</span>
+              </div>
+              <span class="stack-chev">›</span>
+            </div>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <div class="range">
+                <div class="range-label">Recent range (45 days)</div>
+                <div class="range-track">
+                  <div class="range-fill" style="width:18%;background:var(--red);"></div>
+                  <div class="range-marker" style="left:18%;background:var(--red);"></div>
+                </div>
+                <div class="range-ends">
+                  <span>$195 (low)</span>
+                  <span>$248 (high)</span>
+                </div>
+              </div>
+              <div class="rsi-row">
+                <span class="rsi-label">Momentum (5-day)</span>
+                <div class="rsi-track"><div class="rsi-marker" style="left:26%;"></div></div>
+                <span class="rsi-value">26</span>
+              </div>
+              <div class="news-list">
+                <div class="news-label">In the news</div>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Chip stocks extend slide as AI capex questions mount</div>
+                  <div class="news-meta"><span class="source-name">Bloomberg</span><span class="dot-sep"></span><span>1h ago</span></div>
+                </a>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Memory pricing shows signs of softening after two-year surge</div>
+                  <div class="news-meta"><span class="source-name">Reuters</span><span class="dot-sep"></span><span>4h ago</span></div>
+                </a>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Analysts trim earnings forecasts for semi sector into 2026</div>
+                  <div class="news-meta"><span class="source-name">Financial Times</span><span class="dot-sep"></span><span>7h ago</span></div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── YOUR WATCHLIST ─── -->
+      <div class="section-label">
+        Your watchlist
+      </div>
+
+      <div class="stack-group">
+
+        <div class="stack-item sage" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-ticker-block">
+              <span class="stack-ticker">ASML</span>
+            </div>
+            <div class="stack-right">
+              <div class="stack-price-block">
+                <span class="stack-price">€612.40</span>
+                <span class="stack-pct up">+1.2%</span>
+              </div>
+              <span class="stack-chev">›</span>
+            </div>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <div class="range">
+                <div class="range-label">Recent range (45 days)</div>
+                <div class="range-track">
+                  <div class="range-fill" style="width:18%;"></div>
+                  <div class="range-marker" style="left:18%;"></div>
+                </div>
+                <div class="range-ends">
+                  <span>€598 (low)</span>
+                  <span>€742 (high)</span>
+                </div>
+              </div>
+              <div class="rsi-row">
+                <span class="rsi-label">Momentum (5-day)</span>
+                <div class="rsi-track"><div class="rsi-marker" style="left:38%;"></div></div>
+                <span class="rsi-value">38</span>
+              </div>
+              <div class="news-list">
+                <div class="news-label">In the news</div>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">ASML reaffirms 2026 order backlog, orders stable</div>
+                  <div class="news-meta"><span class="source-name">Reuters</span><span class="dot-sep"></span><span>3h ago</span></div>
+                </a>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Lithography remains structural, say sell-side analysts</div>
+                  <div class="news-meta"><span class="source-name">Financial Times</span><span class="dot-sep"></span><span>1d ago</span></div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-item sage" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-ticker-block">
+              <span class="stack-ticker">GRAB</span>
+            </div>
+            <div class="stack-right">
+              <div class="stack-price-block">
+                <span class="stack-price">$4.12</span>
+                <span class="stack-pct up">+2.8%</span>
+              </div>
+              <span class="stack-chev">›</span>
+            </div>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <div class="range">
+                <div class="range-label">Recent range (45 days)</div>
+                <div class="range-track">
+                  <div class="range-fill" style="width:12%;"></div>
+                  <div class="range-marker" style="left:12%;"></div>
+                </div>
+                <div class="range-ends">
+                  <span>$4.02 (low)</span>
+                  <span>$5.18 (high)</span>
+                </div>
+              </div>
+              <div class="rsi-row">
+                <span class="rsi-label">Momentum (5-day)</span>
+                <div class="rsi-track"><div class="rsi-marker" style="left:34%;"></div></div>
+                <span class="rsi-value">34</span>
+              </div>
+              <div class="news-list">
+                <div class="news-label">In the news</div>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Grab posts solid ride-hailing growth in SE Asia</div>
+                  <div class="news-meta"><span class="source-name">Reuters</span><span class="dot-sep"></span><span>4h ago</span></div>
+                </a>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">EM risk-off flows dragging ASEAN equities broadly</div>
+                  <div class="news-meta"><span class="source-name">Bloomberg</span><span class="dot-sep"></span><span>6h ago</span></div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-item amber" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-ticker-block">
+              <span class="stack-ticker">SPY</span>
+            </div>
+            <div class="stack-right">
+              <div class="stack-price-block">
+                <span class="stack-price">$534.80</span>
+                <span class="stack-pct down">−0.4%</span>
+              </div>
+              <span class="stack-chev">›</span>
+            </div>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <div class="range">
+                <div class="range-label">Recent range (45 days)</div>
+                <div class="range-track">
+                  <div class="range-fill" style="width:22%;"></div>
+                  <div class="range-marker" style="left:22%;"></div>
+                </div>
+                <div class="range-ends">
+                  <span>$512 (low)</span>
+                  <span>$578 (high)</span>
+                </div>
+              </div>
+              <div class="rsi-row">
+                <span class="rsi-label">Momentum (5-day)</span>
+                <div class="rsi-track"><div class="rsi-marker" style="left:32%;"></div></div>
+                <span class="rsi-value">32</span>
+              </div>
+              <div class="news-list">
+                <div class="news-label">In the news</div>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">ETF flows turn cautious as retail bid fades</div>
+                  <div class="news-meta"><span class="source-name">Bloomberg</span><span class="dot-sep"></span><span>2h ago</span></div>
+                </a>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Hedging activity picks up in S&P 500 futures</div>
+                  <div class="news-meta"><span class="source-name">Reuters</span><span class="dot-sep"></span><span>5h ago</span></div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-item amber" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-ticker-block">
+              <span class="stack-ticker">NVDA</span>
+            </div>
+            <div class="stack-right">
+              <div class="stack-price-block">
+                <span class="stack-price">$101.40</span>
+                <span class="stack-pct down">−2.3%</span>
+              </div>
+              <span class="stack-chev">›</span>
+            </div>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <div class="range">
+                <div class="range-label">Recent range (45 days)</div>
+                <div class="range-track">
+                  <div class="range-fill" style="width:8%;background:var(--red);"></div>
+                  <div class="range-marker" style="left:8%;background:var(--red);"></div>
+                </div>
+                <div class="range-ends">
+                  <span>$98 (low)</span>
+                  <span>$142 (high)</span>
+                </div>
+              </div>
+              <div class="rsi-row">
+                <span class="rsi-label">Momentum (5-day)</span>
+                <div class="rsi-track"><div class="rsi-marker" style="left:18%;"></div></div>
+                <span class="rsi-value">18</span>
+              </div>
+              <div class="news-list">
+                <div class="news-label">In the news</div>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Nvidia tests multi-month lows as AI leadership questioned</div>
+                  <div class="news-meta"><span class="source-name">Bloomberg</span><span class="dot-sep"></span><span>1h ago</span></div>
+                </a>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Options market pricing continued pressure on chip giants</div>
+                  <div class="news-meta"><span class="source-name">Reuters</span><span class="dot-sep"></span><span>4h ago</span></div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-item amber" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-ticker-block">
+              <span class="stack-ticker">META</span>
+            </div>
+            <div class="stack-right">
+              <div class="stack-price-block">
+                <span class="stack-price">$521.40</span>
+                <span class="stack-pct down">−0.8%</span>
+              </div>
+              <span class="stack-chev">›</span>
+            </div>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <div class="range">
+                <div class="range-label">Recent range (45 days)</div>
+                <div class="range-track">
+                  <div class="range-fill" style="width:35%;background:var(--amber);"></div>
+                  <div class="range-marker" style="left:35%;background:var(--amber);"></div>
+                </div>
+                <div class="range-ends">
+                  <span>$478 (low)</span>
+                  <span>$602 (high)</span>
+                </div>
+              </div>
+              <div class="rsi-row">
+                <span class="rsi-label">Momentum (5-day)</span>
+                <div class="rsi-track"><div class="rsi-marker" style="left:42%;"></div></div>
+                <span class="rsi-value">42</span>
+              </div>
+              <div class="news-list">
+                <div class="news-label">In the news</div>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Meta ad revenue remains resilient despite market rout</div>
+                  <div class="news-meta"><span class="source-name">Financial Times</span><span class="dot-sep"></span><span>3h ago</span></div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-item amber" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-ticker-block">
+              <span class="stack-ticker">GOOG</span>
+            </div>
+            <div class="stack-right">
+              <div class="stack-price-block">
+                <span class="stack-price">$188.20</span>
+                <span class="stack-pct up">+0.3%</span>
+              </div>
+              <span class="stack-chev">›</span>
+            </div>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <div class="range">
+                <div class="range-label">Recent range (45 days)</div>
+                <div class="range-track">
+                  <div class="range-fill" style="width:82%;background:var(--ink-3);opacity:0.3;"></div>
+                  <div class="range-marker" style="left:82%;background:var(--ink-3);"></div>
+                </div>
+                <div class="range-ends">
+                  <span>$168 (low)</span>
+                  <span>$195 (high)</span>
+                </div>
+              </div>
+              <div class="rsi-row">
+                <span class="rsi-label">Momentum (5-day)</span>
+                <div class="rsi-track"><div class="rsi-marker" style="left:64%;"></div></div>
+                <span class="rsi-value">64</span>
+              </div>
+              <div class="news-list">
+                <div class="news-label">In the news</div>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Alphabet holds firm as search resilience impresses</div>
+                  <div class="news-meta"><span class="source-name">Reuters</span><span class="dot-sep"></span><span>4h ago</span></div>
+                </a>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Cloud unit wins large enterprise deal</div>
+                  <div class="news-meta"><span class="source-name">WSJ</span><span class="dot-sep"></span><span>7h ago</span></div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-item amber" onclick="toggleStack(this)">
+          <div class="stack-row">
+            <div class="stack-ticker-block">
+              <span class="stack-ticker">GLD</span>
+            </div>
+            <div class="stack-right">
+              <div class="stack-price-block">
+                <span class="stack-price">$244.60</span>
+                <span class="stack-pct up">+0.5%</span>
+              </div>
+              <span class="stack-chev">›</span>
+            </div>
+          </div>
+          <div class="stack-detail">
+            <div class="stack-detail-inner">
+              <div class="range">
+                <div class="range-label">Recent range (45 days)</div>
+                <div class="range-track">
+                  <div class="range-fill" style="width:68%;background:var(--amber);"></div>
+                  <div class="range-marker" style="left:68%;background:var(--amber);"></div>
+                </div>
+                <div class="range-ends">
+                  <span>$238 (low)</span>
+                  <span>$268 (high)</span>
+                </div>
+              </div>
+              <div class="rsi-row">
+                <span class="rsi-label">Momentum (5-day)</span>
+                <div class="rsi-track"><div class="rsi-marker" style="left:62%;"></div></div>
+                <span class="rsi-value">62</span>
+              </div>
+              <div class="news-list">
+                <div class="news-label">In the news</div>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Gold ETFs see renewed inflows on equity weakness</div>
+                  <div class="news-meta"><span class="source-name">Bloomberg</span><span class="dot-sep"></span><span>2h ago</span></div>
+                </a>
+                <a class="news-item" href="#" onclick="event.preventDefault()">
+                  <div class="news-headline">Central bank demand keeps gold bid firm</div>
+                  <div class="news-meta"><span class="source-name">Financial Times</span><span class="dot-sep"></span><span>1d ago</span></div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      </div><!-- /activeDayContent-deep -->
+
+      <!-- ═══════════ CALM DAY — DEEP DIVE ═══════════ -->
+      <div id="calmDayContent-deep" style="display:none;">
+
+        <!-- ─── INDICES ─── -->
+        <div class="section-label">
+          Indices
+        </div>
+
+        <div class="stack-group">
+
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-ticker-block">
+                <span class="stack-ticker">S&P 500</span>
+              </div>
+              <div class="stack-right">
+                <div class="stack-price-block">
+                  <span class="stack-price">5,782</span>
+                  <span class="stack-pct up">+0.1%</span>
+                </div>
+                <span class="stack-chev">›</span>
+              </div>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <div class="range">
+                  <div class="range-label">Recent range (45 days)</div>
+                  <div class="range-track">
+                    <div class="range-fill" style="width:58%;background:var(--ink-3);opacity:0.3;"></div>
+                    <div class="range-marker" style="left:58%;background:var(--ink-3);"></div>
+                  </div>
+                  <div class="range-ends">
+                    <span>5,620 (low)</span>
+                    <span>5,880 (high)</span>
+                  </div>
+                </div>
+                <div class="news-list">
+                  <div class="news-label">In the news</div>
+                  <a class="news-item" href="#" onclick="event.preventDefault()">
+                    <div class="news-headline">Stocks drift as traders await inflation data next week</div>
+                    <div class="news-meta"><span class="source-name">Reuters</span><span class="dot-sep"></span><span>3h ago</span></div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-ticker-block">
+                <span class="stack-ticker">NASDAQ</span>
+              </div>
+              <div class="stack-right">
+                <div class="stack-price-block">
+                  <span class="stack-price">18,540</span>
+                  <span class="stack-pct up">+0.2%</span>
+                </div>
+                <span class="stack-chev">›</span>
+              </div>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <div class="range">
+                  <div class="range-label">Recent range (45 days)</div>
+                  <div class="range-track">
+                    <div class="range-fill" style="width:52%;background:var(--ink-3);opacity:0.3;"></div>
+                    <div class="range-marker" style="left:52%;background:var(--ink-3);"></div>
+                  </div>
+                  <div class="range-ends">
+                    <span>17,980 (low)</span>
+                    <span>19,120 (high)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-ticker-block">
+                <span class="stack-ticker">Dow Jones</span>
+              </div>
+              <div class="stack-right">
+                <div class="stack-price-block">
+                  <span class="stack-price">42,480</span>
+                  <span class="stack-pct down">−0.1%</span>
+                </div>
+                <span class="stack-chev">›</span>
+              </div>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <div class="range">
+                  <div class="range-label">Recent range (45 days)</div>
+                  <div class="range-track">
+                    <div class="range-fill" style="width:54%;background:var(--ink-3);opacity:0.3;"></div>
+                    <div class="range-marker" style="left:54%;background:var(--ink-3);"></div>
+                  </div>
+                  <div class="range-ends">
+                    <span>41,420 (low)</span>
+                    <span>43,380 (high)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-ticker-block">
+                <span class="stack-ticker">Russell 2000</span>
+              </div>
+              <div class="stack-right">
+                <div class="stack-price-block">
+                  <span class="stack-price">2,264</span>
+                  <span class="stack-pct down">−0.2%</span>
+                </div>
+                <span class="stack-chev">›</span>
+              </div>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <div class="range">
+                  <div class="range-label">Recent range (45 days)</div>
+                  <div class="range-track">
+                    <div class="range-fill" style="width:48%;background:var(--ink-3);opacity:0.3;"></div>
+                    <div class="range-marker" style="left:48%;background:var(--ink-3);"></div>
+                  </div>
+                  <div class="range-ends">
+                    <span>2,180 (low)</span>
+                    <span>2,360 (high)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ─── SENTIMENT ─── -->
+        <div class="section-label">
+          Sentiment
+        </div>
+
+        <div class="stack-group">
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-ticker-block">
+                <span class="stack-ticker">VIX</span>
+                <span class="stack-status">fear gauge</span>
+              </div>
+              <div class="stack-right">
+                <div class="stack-price-block">
+                  <span class="stack-price">16</span>
+                  <span class="stack-pct" style="color:var(--ink-3);">normal</span>
+                </div>
+                <span class="stack-chev">›</span>
+              </div>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <div class="rsi-row">
+                  <span class="rsi-label">Level</span>
+                  <div class="vix-track"><div class="rsi-marker" style="left:28%;"></div></div>
+                  <span class="rsi-value">16</span>
+                </div>
+                <div class="range-ends" style="margin-top:6px;">
+                  <span>calm (12)</span>
+                  <span>panic (40+)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── COMMODITIES ─── -->
+        <div class="section-label">
+          Commodities
+        </div>
+
+        <div class="stack-group">
+
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-ticker-block">
+                <span class="stack-ticker">Gold</span>
+              </div>
+              <div class="stack-right">
+                <div class="stack-price-block">
+                  <span class="stack-price">$2,612</span>
+                  <span class="stack-pct down">−0.1%</span>
+                </div>
+                <span class="stack-chev">›</span>
+              </div>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <div class="range">
+                  <div class="range-label">Recent range (45 days)</div>
+                  <div class="range-track">
+                    <div class="range-fill" style="width:54%;background:var(--ink-3);opacity:0.3;"></div>
+                    <div class="range-marker" style="left:54%;background:var(--ink-3);"></div>
+                  </div>
+                  <div class="range-ends">
+                    <span>$2,548 (low)</span>
+                    <span>$2,690 (high)</span>
+                  </div>
+                </div>
+                <div class="news-list">
+                  <div class="news-label">In the news</div>
+                  <a class="news-item" href="#" onclick="event.preventDefault()">
+                    <div class="news-headline">Gold steady as investors await inflation data</div>
+                    <div class="news-meta"><span class="source-name">Reuters</span><span class="dot-sep"></span><span>5h ago</span></div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-ticker-block">
+                <span class="stack-ticker">Crude Oil</span>
+              </div>
+              <div class="stack-right">
+                <div class="stack-price-block">
+                  <span class="stack-price">$73.80</span>
+                  <span class="stack-pct up">+0.3%</span>
+                </div>
+                <span class="stack-chev">›</span>
+              </div>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <div class="range">
+                  <div class="range-label">Recent range (45 days)</div>
+                  <div class="range-track">
+                    <div class="range-fill" style="width:46%;background:var(--ink-3);opacity:0.3;"></div>
+                    <div class="range-marker" style="left:46%;background:var(--ink-3);"></div>
+                  </div>
+                  <div class="range-ends">
+                    <span>$70.20 (low)</span>
+                    <span>$78.40 (high)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ─── SECTORS ─── -->
+        <div class="section-label">
+          Sectors on your watchlist
+        </div>
+
+        <div class="stack-group">
+          <div class="stack-item blue" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-ticker-block">
+                <span class="stack-ticker">SOXX</span>
+                <span class="stack-status">Semiconductors</span>
+              </div>
+              <div class="stack-right">
+                <div class="stack-price-block">
+                  <span class="stack-price">$222.80</span>
+                  <span class="stack-pct down">−0.2%</span>
+                </div>
+                <span class="stack-chev">›</span>
+              </div>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <div class="range">
+                  <div class="range-label">Recent range (45 days)</div>
+                  <div class="range-track">
+                    <div class="range-fill" style="width:52%;background:var(--ink-3);opacity:0.3;"></div>
+                    <div class="range-marker" style="left:52%;background:var(--ink-3);"></div>
+                  </div>
+                  <div class="range-ends">
+                    <span>$208 (low)</span>
+                    <span>$238 (high)</span>
+                  </div>
+                </div>
+                <div class="rsi-row">
+                  <span class="rsi-label">Momentum (5-day)</span>
+                  <div class="rsi-track"><div class="rsi-marker" style="left:48%;"></div></div>
+                  <span class="rsi-value">48</span>
+                </div>
+                <div class="news-list">
+                  <div class="news-label">In the news</div>
+                  <a class="news-item" href="#" onclick="event.preventDefault()">
+                    <div class="news-headline">Semis trade in narrow range as earnings season winds down</div>
+                    <div class="news-meta"><span class="source-name">Reuters</span><span class="dot-sep"></span><span>6h ago</span></div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── YOUR WATCHLIST ─── -->
+        <div class="section-label">
+          Your watchlist
+        </div>
+
+        <div class="stack-group">
+
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-ticker-block">
+                <span class="stack-ticker">ASML</span>
+              </div>
+              <div class="stack-right">
+                <div class="stack-price-block">
+                  <span class="stack-price">€668.20</span>
+                  <span class="stack-pct down">−0.2%</span>
+                </div>
+                <span class="stack-chev">›</span>
+              </div>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <div class="range">
+                  <div class="range-label">Recent range (45 days)</div>
+                  <div class="range-track">
+                    <div class="range-fill" style="width:48%;background:var(--ink-3);opacity:0.3;"></div>
+                    <div class="range-marker" style="left:48%;background:var(--ink-3);"></div>
+                  </div>
+                  <div class="range-ends">
+                    <span>€598 (low)</span>
+                    <span>€742 (high)</span>
+                  </div>
+                </div>
+                <div class="rsi-row">
+                  <span class="rsi-label">Momentum (5-day)</span>
+                  <div class="rsi-track"><div class="rsi-marker" style="left:52%;"></div></div>
+                  <span class="rsi-value">52</span>
+                </div>
+                <div class="news-list">
+                  <div class="news-label">In the news</div>
+                  <a class="news-item" href="#" onclick="event.preventDefault()">
+                    <div class="news-headline">ASML quiet ahead of Q2 update; order book stable</div>
+                    <div class="news-meta"><span class="source-name">Reuters</span><span class="dot-sep"></span><span>1d ago</span></div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-ticker-block">
+                <span class="stack-ticker">GRAB</span>
+              </div>
+              <div class="stack-right">
+                <div class="stack-price-block">
+                  <span class="stack-price">$4.42</span>
+                  <span class="stack-pct up">+0.2%</span>
+                </div>
+                <span class="stack-chev">›</span>
+              </div>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <div class="range">
+                  <div class="range-label">Recent range (45 days)</div>
+                  <div class="range-track">
+                    <div class="range-fill" style="width:32%;background:var(--ink-3);opacity:0.3;"></div>
+                    <div class="range-marker" style="left:32%;background:var(--ink-3);"></div>
+                  </div>
+                  <div class="range-ends">
+                    <span>$4.02 (low)</span>
+                    <span>$5.18 (high)</span>
+                  </div>
+                </div>
+                <div class="rsi-row">
+                  <span class="rsi-label">Momentum (5-day)</span>
+                  <div class="rsi-track"><div class="rsi-marker" style="left:46%;"></div></div>
+                  <span class="rsi-value">46</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-ticker-block">
+                <span class="stack-ticker">SPY</span>
+              </div>
+              <div class="stack-right">
+                <div class="stack-price-block">
+                  <span class="stack-price">$550.20</span>
+                  <span class="stack-pct up">+0.1%</span>
+                </div>
+                <span class="stack-chev">›</span>
+              </div>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <div class="range">
+                  <div class="range-label">Recent range (45 days)</div>
+                  <div class="range-track">
+                    <div class="range-fill" style="width:58%;background:var(--ink-3);opacity:0.3;"></div>
+                    <div class="range-marker" style="left:58%;background:var(--ink-3);"></div>
+                  </div>
+                  <div class="range-ends">
+                    <span>$512 (low)</span>
+                    <span>$578 (high)</span>
+                  </div>
+                </div>
+                <div class="rsi-row">
+                  <span class="rsi-label">Momentum (5-day)</span>
+                  <div class="rsi-track"><div class="rsi-marker" style="left:54%;"></div></div>
+                  <span class="rsi-value">54</span>
+                </div>
+                <div class="news-list">
+                  <div class="news-label">In the news</div>
+                  <a class="news-item" href="#" onclick="event.preventDefault()">
+                    <div class="news-headline">Broad index ETFs see steady passive inflows</div>
+                    <div class="news-meta"><span class="source-name">Reuters</span><span class="dot-sep"></span><span>5h ago</span></div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-ticker-block">
+                <span class="stack-ticker">NVDA</span>
+              </div>
+              <div class="stack-right">
+                <div class="stack-price-block">
+                  <span class="stack-price">$118.40</span>
+                  <span class="stack-pct down">−0.3%</span>
+                </div>
+                <span class="stack-chev">›</span>
+              </div>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <div class="range">
+                  <div class="range-label">Recent range (45 days)</div>
+                  <div class="range-track">
+                    <div class="range-fill" style="width:46%;background:var(--ink-3);opacity:0.3;"></div>
+                    <div class="range-marker" style="left:46%;background:var(--ink-3);"></div>
+                  </div>
+                  <div class="range-ends">
+                    <span>$98 (low)</span>
+                    <span>$142 (high)</span>
+                  </div>
+                </div>
+                <div class="rsi-row">
+                  <span class="rsi-label">Momentum (5-day)</span>
+                  <div class="rsi-track"><div class="rsi-marker" style="left:48%;"></div></div>
+                  <span class="rsi-value">48</span>
+                </div>
+                <div class="news-list">
+                  <div class="news-label">In the news</div>
+                  <a class="news-item" href="#" onclick="event.preventDefault()">
+                    <div class="news-headline">Chip stocks steady as inventory levels normalise</div>
+                    <div class="news-meta"><span class="source-name">Bloomberg</span><span class="dot-sep"></span><span>6h ago</span></div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-ticker-block">
+                <span class="stack-ticker">META</span>
+              </div>
+              <div class="stack-right">
+                <div class="stack-price-block">
+                  <span class="stack-price">$540.60</span>
+                  <span class="stack-pct up">+0.2%</span>
+                </div>
+                <span class="stack-chev">›</span>
+              </div>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <div class="range">
+                  <div class="range-label">Recent range (45 days)</div>
+                  <div class="range-track">
+                    <div class="range-fill" style="width:52%;background:var(--ink-3);opacity:0.3;"></div>
+                    <div class="range-marker" style="left:52%;background:var(--ink-3);"></div>
+                  </div>
+                  <div class="range-ends">
+                    <span>$478 (low)</span>
+                    <span>$602 (high)</span>
+                  </div>
+                </div>
+                <div class="rsi-row">
+                  <span class="rsi-label">Momentum (5-day)</span>
+                  <div class="rsi-track"><div class="rsi-marker" style="left:50%;"></div></div>
+                  <span class="rsi-value">50</span>
+                </div>
+                <div class="news-list">
+                  <div class="news-label">In the news</div>
+                  <a class="news-item" href="#" onclick="event.preventDefault()">
+                    <div class="news-headline">Meta trades in narrow range ahead of earnings</div>
+                    <div class="news-meta"><span class="source-name">Reuters</span><span class="dot-sep"></span><span>4h ago</span></div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-ticker-block">
+                <span class="stack-ticker">GOOG</span>
+              </div>
+              <div class="stack-right">
+                <div class="stack-price-block">
+                  <span class="stack-price">$190.80</span>
+                  <span class="stack-pct up">+0.1%</span>
+                </div>
+                <span class="stack-chev">›</span>
+              </div>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <div class="range">
+                  <div class="range-label">Recent range (45 days)</div>
+                  <div class="range-track">
+                    <div class="range-fill" style="width:82%;background:var(--ink-3);opacity:0.3;"></div>
+                    <div class="range-marker" style="left:82%;background:var(--ink-3);"></div>
+                  </div>
+                  <div class="range-ends">
+                    <span>$168 (low)</span>
+                    <span>$195 (high)</span>
+                  </div>
+                </div>
+                <div class="rsi-row">
+                  <span class="rsi-label">Momentum (5-day)</span>
+                  <div class="rsi-track"><div class="rsi-marker" style="left:58%;"></div></div>
+                  <span class="rsi-value">58</span>
+                </div>
+                <div class="news-list">
+                  <div class="news-label">In the news</div>
+                  <a class="news-item" href="#" onclick="event.preventDefault()">
+                    <div class="news-headline">Alphabet steady on stable search metrics</div>
+                    <div class="news-meta"><span class="source-name">Bloomberg</span><span class="dot-sep"></span><span>1d ago</span></div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack-item amber" onclick="toggleStack(this)">
+            <div class="stack-row">
+              <div class="stack-ticker-block">
+                <span class="stack-ticker">GLD</span>
+              </div>
+              <div class="stack-right">
+                <div class="stack-price-block">
+                  <span class="stack-price">$243.80</span>
+                  <span class="stack-pct down">−0.1%</span>
+                </div>
+                <span class="stack-chev">›</span>
+              </div>
+            </div>
+            <div class="stack-detail">
+              <div class="stack-detail-inner">
+                <div class="range">
+                  <div class="range-label">Recent range (45 days)</div>
+                  <div class="range-track">
+                    <div class="range-fill" style="width:66%;background:var(--ink-3);opacity:0.3;"></div>
+                    <div class="range-marker" style="left:66%;background:var(--ink-3);"></div>
+                  </div>
+                  <div class="range-ends">
+                    <span>$238 (low)</span>
+                    <span>$268 (high)</span>
+                  </div>
+                </div>
+                <div class="rsi-row">
+                  <span class="rsi-label">Momentum (5-day)</span>
+                  <div class="rsi-track"><div class="rsi-marker" style="left:54%;"></div></div>
+                  <span class="rsi-value">54</span>
+                </div>
+                <div class="news-list">
+                  <div class="news-label">In the news</div>
+                  <a class="news-item" href="#" onclick="event.preventDefault()">
+                    <div class="news-headline">Gold holds near recent highs as markets stabilise</div>
+                    <div class="news-meta"><span class="source-name">Reuters</span><span class="dot-sep"></span><span>6h ago</span></div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div><!-- /calmDayContent-deep -->
+
+    </div>
+
+  </div>
+
+  <!-- Tabs (anchored to phone bottom via absolute positioning) -->
+  <div class="tabs-bar">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('todo', this)">To do</button>
+      <button class="tab" onclick="switchTab('why', this)">Why</button>
+      <button class="tab" onclick="switchTab('deep', this)">Deep dive</button>
+    </div>
+  </div>
+
+  <!-- Bottom sheet -->
+  <div class="sheet-backdrop" id="backdrop" onclick="closeSheet()"></div>
+  <div class="sheet" id="sheet">
+    <div class="sheet-grabber"></div>
+    <button class="sheet-close" onclick="closeSheet()">×</button>
+    <div class="sheet-body" id="sheetBody"></div>
+  </div>
+
+  <!-- Settings modal -->
+  <div class="settings-modal" id="settingsModal">
+    <div class="settings-topbar">
+      <div class="settings-title">Settings</div>
+      <button class="settings-close" onclick="closeSettings()" aria-label="Close">×</button>
+    </div>
+    <div class="settings-body">
+
+      <!-- Account -->
+      <div class="settings-section">
+        <div class="account-block">
+          <div class="account-avatar">A</div>
+          <div>
+            <div class="account-name">Amy</div>
+            <div class="account-email">amy@investassist.app</div>
+          </div>
+          <div class="account-plan-tag">Pilot</div>
+        </div>
+      </div>
+
+      <!-- Watchlist -->
+      <div class="settings-section">
+        <div class="settings-section-label">Watchlist · 7 assets</div>
+        <div class="settings-group">
+          <div class="watchlist-row">
+            <div class="watchlist-row-left">
+              <span class="watchlist-ticker">ASML</span>
+              <span class="watchlist-name">ASML Holding N.V.</span>
+            </div>
+            <button class="watchlist-remove" aria-label="Remove ASML">−</button>
+          </div>
+          <div class="watchlist-row">
+            <div class="watchlist-row-left">
+              <span class="watchlist-ticker">GRAB</span>
+              <span class="watchlist-name">Grab Holdings</span>
+            </div>
+            <button class="watchlist-remove" aria-label="Remove GRAB">−</button>
+          </div>
+          <div class="watchlist-row">
+            <div class="watchlist-row-left">
+              <span class="watchlist-ticker">SPY</span>
+              <span class="watchlist-name">S&P 500 ETF</span>
+            </div>
+            <button class="watchlist-remove" aria-label="Remove SPY">−</button>
+          </div>
+          <div class="watchlist-row">
+            <div class="watchlist-row-left">
+              <span class="watchlist-ticker">NVDA</span>
+              <span class="watchlist-name">NVIDIA Corp.</span>
+            </div>
+            <button class="watchlist-remove" aria-label="Remove NVDA">−</button>
+          </div>
+          <div class="watchlist-row">
+            <div class="watchlist-row-left">
+              <span class="watchlist-ticker">META</span>
+              <span class="watchlist-name">Meta Platforms</span>
+            </div>
+            <button class="watchlist-remove" aria-label="Remove META">−</button>
+          </div>
+          <div class="watchlist-row">
+            <div class="watchlist-row-left">
+              <span class="watchlist-ticker">GOOG</span>
+              <span class="watchlist-name">Alphabet Inc.</span>
+            </div>
+            <button class="watchlist-remove" aria-label="Remove GOOG">−</button>
+          </div>
+          <div class="watchlist-row">
+            <div class="watchlist-row-left">
+              <span class="watchlist-ticker">GLD</span>
+              <span class="watchlist-name">SPDR Gold Shares</span>
+            </div>
+            <button class="watchlist-remove" aria-label="Remove GLD">−</button>
+          </div>
+          <div class="watchlist-add">
+            <div class="watchlist-add-plus">+</div>
+            <div class="watchlist-add-label">Add ticker</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications -->
+      <div class="settings-section">
+        <div class="settings-section-label">Notifications</div>
+        <div class="settings-group">
+          <div class="settings-row">
+            <div class="settings-row-main">
+              <div class="settings-row-label">Daily brief email</div>
+              <div class="settings-row-sub">Delivered at 7:30 AM local time</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" checked>
+              <span class="toggle-track"></span>
+              <span class="toggle-thumb"></span>
+            </label>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-main">
+              <div class="settings-row-label">Updates during the day</div>
+              <div class="settings-row-sub">Get a push notification if signals change while markets are open</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox">
+              <span class="toggle-track"></span>
+              <span class="toggle-thumb"></span>
+            </label>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-main">
+              <div class="settings-row-label">Biweekly recap</div>
+              <div class="settings-row-sub">Every other Friday</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" checked>
+              <span class="toggle-track"></span>
+              <span class="toggle-thumb"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Display -->
+      <div class="settings-section">
+        <div class="settings-section-label">Display</div>
+        <div class="settings-group">
+          <div class="settings-row">
+            <div class="settings-row-main">
+              <div class="settings-row-label">Show "How to read this brief"</div>
+              <div class="settings-row-sub">Explainer at the top of daily emails</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" checked>
+              <span class="toggle-track"></span>
+              <span class="toggle-thumb"></span>
+            </label>
+          </div>
+          <div class="settings-row tappable">
+            <div class="settings-row-main">
+              <div class="settings-row-label">Currency</div>
+              <div class="settings-row-sub">For display only — doesn't convert prices</div>
+            </div>
+            <div class="settings-row-value">
+              EUR
+              <span class="settings-row-chev">›</span>
+            </div>
+          </div>
+          <div class="settings-row tappable">
+            <div class="settings-row-main">
+              <div class="settings-row-label">Timezone</div>
+            </div>
+            <div class="settings-row-value">
+              Europe/Amsterdam
+              <span class="settings-row-chev">›</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- About & Legal -->
+      <div class="settings-section">
+        <div class="settings-section-label">About</div>
+        <div class="settings-group">
+          <div class="settings-row tappable">
+            <div class="settings-row-main">
+              <div class="settings-row-label">Give feedback</div>
+            </div>
+            <span class="settings-row-chev">›</span>
+          </div>
+          <div class="settings-row tappable">
+            <div class="settings-row-main">
+              <div class="settings-row-label">Terms of use</div>
+            </div>
+            <span class="settings-row-chev">›</span>
+          </div>
+          <div class="settings-row tappable">
+            <div class="settings-row-main">
+              <div class="settings-row-label">Privacy policy</div>
+            </div>
+            <span class="settings-row-chev">›</span>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-main">
+              <div class="settings-row-label">Version</div>
+            </div>
+            <div class="settings-row-value" style="color:var(--ink-3);">0.4.2 pilot</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Regulatory disclaimer -->
+      <div style="text-align:center;padding:20px 10px 0;font-size:11px;color:var(--ink-3);line-height:1.5;">
+        InvestAssist shares ideas to help you think, not instructions to follow.<br>
+        This is not investment advice. Past performance doesn't guarantee future results.
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('panel-' + tab).classList.add('active');
+    btn.classList.add('active');
+    document.getElementById('screen').scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  let isCalm = false;
+  function toggleCalm() {
+    isCalm = !isCalm;
+    // Toggle active/calm content across all three tabs
+    const activeDisplay = isCalm ? 'none' : '';
+    const calmDisplay = isCalm ? '' : 'none';
+
+    document.getElementById('activeDayContent').style.display = activeDisplay;
+    document.getElementById('calmDayContent').style.display = calmDisplay;
+
+    document.getElementById('activeDayContent-why').style.display = activeDisplay;
+    document.getElementById('calmDayContent-why').style.display = calmDisplay;
+
+    document.getElementById('activeDayContent-deep').style.display = activeDisplay;
+    document.getElementById('calmDayContent-deep').style.display = calmDisplay;
+
+    document.getElementById('demoLabel').textContent = isCalm ? 'Calm day' : 'Active day';
+  }
+
+  function toggleQuiet(item) {
+    item.classList.toggle('open');
+  }
+
+  function toggleStack(item) {
+    item.classList.toggle('open');
+  }
+
+  const sheetContent = {
+    macro: {
+      title: 'Market',
+      name: 'Market mood',
+      action: '<span class="asset-action macro">Cautious</span>',
+      reason: 'Is the market about to bottom?',
+      why: '<p>Maybe — but we can\'t tell yet. The drop has slowed, and fear (the VIX) is high but no longer rising. That mix has led to a turnaround before, but it\'s also preceded more selling. That\'s why we\'re keeping your buy sizes to medium today.</p><div class="why-tags"><span class="why-tag pos">selling is slowing</span><span class="why-tag cau">fear still high</span><span class="why-tag pos">a floor may be forming</span></div>',
+      deep: `<div class="range"><div class="range-label">VIX (fear gauge)</div><div class="range-track"><div class="range-fill" style="width:68%;background:var(--amber);"></div><div class="range-marker" style="left:68%;background:var(--amber);"></div></div><div class="range-ends"><span>calm (12)</span><span>panic (40+)</span></div></div>`,
+      showMute: false
+    },
+    sizing: {
+      title: 'How much',
+      name: 'How much to buy',
+      action: '<span class="asset-action macro">Medium size</span>',
+      reason: 'Why not buy the full amount today?',
+      why: '<p>Because the market is fragile. Buy set-ups are forming, but we\'re not confident enough yet to go big. Today you can start positions at small or medium size — just not large.</p><div class="why-tags"><span class="why-tag cau">market fragile</span><span class="why-tag pos">Small — OK</span><span class="why-tag pos">Medium — OK</span><span class="why-tag neg">Large — not today</span></div>',
+      deep: '',
+      showMute: false
+    },
+    asml: {
+      title: 'ASML',
+      name: 'ASML Holding N.V.',
+      price: '€612.40',
+      priceChange: '+1.2%',
+      priceDirection: 'up',
+      action: '<span class="asset-action buy">Buy <span class="sz">· Medium</span></span><div class="entry-info"><span class="entry-info-label">Entry</span><div class="entry-range"><span class="price">€605</span><span class="dash">—</span><span class="price">€620</span></div></div>',
+      reason: 'Why is ASML a buy today?',
+      why: '<p>It\'s dropped close to its lowest price in two months — and it\'s <em>stopped going down</em>. That\'s the first hint buyers are showing up. The longer-term trend is still weak, so we\'re suggesting medium, not large. You\'re starting a position, not betting the whole budget.</p><div class="why-tags"><span class="why-tag pos">priced low</span><span class="why-tag pos">starting to turn</span><span class="why-tag cau">trend still weak</span></div>',
+      deep: `<div class="range"><div class="range-label">Recent range (45 days)</div><div class="range-track"><div class="range-fill" style="width:18%;"></div><div class="range-marker" style="left:18%;"></div></div><div class="range-ends"><span>€598 (low)</span><span>€742 (high)</span></div></div>`,
+      showMute: true
+    },
+    grab: {
+      title: 'GRAB',
+      name: 'Grab Holdings',
+      price: '$4.12',
+      priceChange: '+2.8%',
+      priceDirection: 'up',
+      action: '<span class="asset-action buy">Buy <span class="sz">· Medium</span></span><div class="entry-info"><span class="entry-info-label">Entry</span><div class="entry-range"><span class="price">$4.05</span><span class="dash">—</span><span class="price">$4.20</span></div></div>',
+      reason: 'Why is GRAB a buy today?',
+      why: '<p>This looks like more than a quick bounce. The days GRAB went up had much <em>more trading activity</em> than the days it went down — usually a sign real buyers are stepping in. With the price still near recent lows, this is one of the cleaner set-ups we\'ve seen.</p><div class="why-tags"><span class="why-tag pos">priced low</span><span class="why-tag pos">real buying</span><span class="why-tag pos">finding its footing</span></div>',
+      deep: `<div class="range"><div class="range-label">Recent range (45 days)</div><div class="range-track"><div class="range-fill" style="width:12%;"></div><div class="range-marker" style="left:12%;"></div></div><div class="range-ends"><span>$4.02 (low)</span><span>$5.18 (high)</span></div></div>`,
+      showMute: true
+    },
+    sector: {
+      title: 'Semiconductors',
+      name: 'Sector to watch',
+      action: '<span class="asset-action sector">Weakening</span>',
+      reason: 'Why are my chip stocks weak today?',
+      why: '<p>This isn\'t about any one company — the whole chip sector is having a rough stretch. After two years of heavy spending on AI, big tech is pausing to work out what it actually needs next, and higher interest rates are hurting companies that borrow a lot. Your ASML signal is forming <em>despite</em> this, which is why we\'re keeping the buy size conservative.</p><div class="why-tags"><span class="why-tag neg">sector is weak</span><span class="why-tag cau">AI spending paused</span><span class="why-tag cau">interest rates biting</span></div>',
+      deep: `<div class="range"><div class="range-label">Recent range (45 days)</div><div class="range-track"><div class="range-fill" style="width:18%;background:var(--red);opacity:0.25;"></div><div class="range-marker" style="left:18%;background:var(--red);"></div></div><div class="range-ends"><span>$195 (low)</span><span>$248 (high)</span></div></div>`,
+      showMute: false
+    }
+  };
+
+  let currentMuted = {};
+
+  function openSheet(key) {
+    const data = sheetContent[key];
+    if (!data) return;
+    const muted = currentMuted[key];
+    const body = document.getElementById('sheetBody');
+    const priceBlock = data.price ? `
+      <div class="sheet-header-right">
+        <div class="sheet-price">${data.price}</div>
+        ${data.priceChange ? `<div class="sheet-price-change ${data.priceDirection || ''}">${data.priceChange}</div>` : ''}
+      </div>
+    ` : '';
+    body.innerHTML = `
+      <div class="sheet-header">
+        <div class="sheet-header-left">
+          <div class="sheet-ticker">${data.title}</div>
+          <div class="sheet-name">${data.name}</div>
+        </div>
+        ${priceBlock}
+      </div>
+      <div class="sheet-action-row">${data.action}</div>
+      <div class="sheet-section"><div class="sheet-reason">${data.reason}</div></div>
+      ${data.why ? `<div class="sheet-section"><div class="sheet-section-label">Why</div>${data.why}</div>` : ''}
+      ${data.deep ? `<div class="sheet-section"><div class="sheet-section-label">Deep dive</div>${data.deep}</div>` : ''}
+      ${data.showMute ? `<div class="mute-bar"><button class="mute-btn ${muted ? 'muted' : ''}" onclick="toggleMute('${key}', this)">${muted ? '✓ Muted for 1 week' : "Mute for 1 week"}</button></div>` : ''}
+    `;
+    document.getElementById('backdrop').classList.add('open');
+    document.getElementById('sheet').classList.add('open');
+  }
+
+  function closeSheet() {
+    document.getElementById('backdrop').classList.remove('open');
+    document.getElementById('sheet').classList.remove('open');
+  }
+
+  function toggleMute(key, btn) {
+    currentMuted[key] = !currentMuted[key];
+    if (currentMuted[key]) {
+      btn.classList.add('muted');
+      btn.textContent = '✓ Muted for 1 week';
+    } else {
+      btn.classList.remove('muted');
+      btn.textContent = "Mute for 1 week";
+    }
+  }
+
+  // ───── Settings modal ─────
+  function openSettings() {
+    document.getElementById('settingsModal').classList.add('open');
+  }
+  function closeSettings() {
+    document.getElementById('settingsModal').classList.remove('open');
+  }
+
+  // Watchlist remove (demo): fade out and remove the row
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.watchlist-remove');
+    if (btn) {
+      const row = btn.closest('.watchlist-row');
+      if (row) {
+        row.style.transition = 'opacity 0.25s ease, transform 0.25s ease, max-height 0.3s ease';
+        row.style.overflow = 'hidden';
+        row.style.maxHeight = row.offsetHeight + 'px';
+        // next frame
+        requestAnimationFrame(() => {
+          row.style.opacity = '0';
+          row.style.transform = 'translateX(20px)';
+          row.style.maxHeight = '0';
+          row.style.paddingTop = '0';
+          row.style.paddingBottom = '0';
+        });
+        setTimeout(() => row.remove(), 300);
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
