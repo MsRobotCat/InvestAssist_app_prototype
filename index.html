@@ -1667,6 +1667,314 @@
     color: var(--sage-2);
   }
 
+  /* ───────── Investor Playbook ───────── */
+  /* Plan reminder line on signal cards */
+  .plan-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--border);
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .plan-line .plan-label {
+    font-weight: 600;
+    color: var(--ink-3);
+    letter-spacing: 0.2px;
+  }
+  .plan-line .plan-amount {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  /* Check-in card (accountability, shows day after a signal) */
+  .checkin-card {
+    background: var(--card);
+    border: 1px solid var(--sage-border);
+    border-left: 3px solid var(--sage);
+    border-radius: var(--r-sm);
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+  .checkin-source {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--sage-2);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .checkin-source .dot {
+    width: 5px; height: 5px; border-radius: 50%; background: var(--sage);
+  }
+  .checkin-question {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .checkin-context {
+    font-size: 12px;
+    color: var(--ink-3);
+    margin-bottom: 12px;
+  }
+  .checkin-btns {
+    display: flex;
+    gap: 8px;
+  }
+  .checkin-btn {
+    flex: 1;
+    padding: 10px 0;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+    color: var(--ink-2);
+  }
+  .checkin-btn:active { transform: scale(0.97); }
+  .checkin-btn.yes {
+    background: var(--sage-bg);
+    border-color: var(--sage-border);
+    color: var(--sage-2);
+  }
+  .checkin-btn.yes:active { background: var(--sage); color: white; }
+  /* After responding */
+  .checkin-response {
+    display: none;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+    margin-top: 10px;
+  }
+  .checkin-card.responded .checkin-btns { display: none; }
+  .checkin-card.responded .checkin-response { display: block; }
+  .checkin-response-msg {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+  .checkin-response-msg strong {
+    color: var(--sage-2);
+    font-weight: 600;
+  }
+  .checkin-streak {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--sage-2);
+    background: var(--sage-bg);
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+
+  /* Skip reasons (when user says No) */
+  .skip-reasons {
+    display: none;
+    margin-top: 8px;
+  }
+  .checkin-card.show-skip .checkin-btns { display: none; }
+  .checkin-card.show-skip .skip-reasons { display: block; }
+  .skip-q {
+    font-size: 12px;
+    color: var(--ink-3);
+    margin-bottom: 8px;
+  }
+  .skip-option {
+    display: block;
+    width: 100%;
+    padding: 9px 12px;
+    margin-bottom: 4px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-2);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.12s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .skip-option:active {
+    background: var(--bg-2);
+  }
+
+  /* Plan setup in settings */
+  .plan-setup {
+    padding: 16px;
+  }
+  .plan-setup-intro {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.55;
+    margin-bottom: 14px;
+  }
+  .plan-commitment {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .plan-commitment-text {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.5;
+    letter-spacing: -0.005em;
+  }
+  .plan-commitment-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--sage-2);
+    font-weight: 600;
+  }
+  .plan-commitment-check .check-icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--sage);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+  .plan-helper {
+    font-size: 11px;
+    color: var(--ink-3);
+    line-height: 1.5;
+  }
+
+  /* Commitment reminder on signal cards — appears during drawdowns */
+  .plan-reminder {
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: var(--bg);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+  .plan-reminder-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 4px;
+  }
+  .plan-reminder em {
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    color: var(--ink);
+    font-weight: 400;
+  }
+
+  /* Plan reminder in bottom sheet */
+  .sheet-plan {
+    margin: 0 0 16px;
+    padding: 12px 14px;
+    background: var(--bg);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+  .sheet-plan .plan-reminder-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 4px;
+  }
+  .sheet-plan em {
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    color: var(--ink);
+    font-weight: 400;
+  }
+
+  /* ───────── Reassurance card (drawdown empathy) ───────── */
+  .reassure-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    padding: 18px;
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .reassure-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .reassure-q {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 16px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.35;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+  .reassure-card p {
+    font-size: 13.5px;
+    color: var(--ink-2);
+    line-height: 1.65;
+    margin-bottom: 10px;
+  }
+  .reassure-card p:last-of-type { margin-bottom: 0; }
+  .reassure-card p em {
+    font-style: italic;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .reassure-card p strong {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .reassure-footer {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+    font-size: 12px;
+    color: var(--ink-3);
+    line-height: 1.5;
+    font-style: italic;
+  }
+
   /* Calm day */
   .calm-state {
     text-align: center;
@@ -1847,7 +2155,28 @@
           <h2>What needs your <em>attention</em>.</h2>
         </div>
 
-        <!-- Macro watch -->
+                <!-- Playbook check-in (yesterday's signal) -->
+        <div class="checkin-card" id="checkinCard">
+          <div class="checkin-source"><span class="dot"></span>Your playbook</div>
+          <div class="checkin-question">ASML dropped 18% — your playbook says to act.</div>
+          <div class="checkin-context">You committed to following buy signals during drawdowns.</div>
+          <div class="checkin-btns">
+            <button class="checkin-btn yes" onclick="checkinYes()">I'll follow my plan</button>
+            <button class="checkin-btn" onclick="checkinNo()">I need to think</button>
+          </div>
+          <div class="skip-reasons">
+            <div class="skip-q">That's OK. What's making you hesitate?</div>
+            <button class="skip-option" onclick="checkinSkipDone(this)">It feels too risky right now</button>
+            <button class="skip-option" onclick="checkinSkipDone(this)">I don't have the cash ready</button>
+            <button class="skip-option" onclick="checkinSkipDone(this)">I want to wait and see</button>
+            <button class="skip-option" onclick="checkinSkipDone(this)">The drop feels different this time</button>
+          </div>
+          <div class="checkin-response">
+            <div class="checkin-response-msg" id="checkinMsg"></div>
+          </div>
+        </div>
+
+<!-- Macro watch -->
         <div class="stream-card macro" onclick="openSheet('macro')">
           <div class="source">
             <span class="dot"></span>Market mood
@@ -1879,6 +2208,10 @@
             <span class="entry-label">Entry</span>
             <span class="entry-price">€605 — €620</span>
           </div>
+          <div class="plan-reminder">
+            <div class="plan-reminder-label">Your playbook</div>
+            ASML is down 18% from its recent high. You committed: <em>"I will follow the signal — even when it feels uncomfortable."</em>
+          </div>
         </div>
 
         <!-- Asset: GRAB -->
@@ -1894,6 +2227,10 @@
           <div class="asset-entry">
             <span class="entry-label">Entry</span>
             <span class="entry-price">$4.05 — $4.20</span>
+          </div>
+          <div class="plan-reminder">
+            <div class="plan-reminder-label">Your playbook</div>
+            GRAB is down 22% from its recent high. You committed: <em>"I will follow the signal — even when it feels uncomfortable."</em>
           </div>
         </div>
 
@@ -2094,6 +2431,34 @@
       </div>
 
       <div id="activeDayContent-why">
+
+      <!-- ─── REASSURANCE (drawdown empathy) ─── -->
+      <div class="reassure-card">
+        <div class="reassure-label">If you're feeling nervous</div>
+        <div class="reassure-q">This drop feels scary. That's completely normal.</div>
+        <p>
+          Your portfolio is down and every instinct says <em>protect what's left</em>.
+          That feeling is real — it's not a sign that something is wrong with you.
+          It's your brain doing its job.
+        </p>
+        <p>
+          But here's the thing: <strong>this is exactly the moment long-term investors
+          are made</strong>. Markets have always recovered from drops like this. Not
+          immediately, not smoothly — but they do recover. The people who come out
+          ahead are the ones who bought when it felt terrible.
+        </p>
+        <p>
+          You don't have to go all-in. You don't have to buy today. But
+          <em>selling right now is almost certainly the wrong move</em>. If you can
+          buy a little — even a small amount — future-you will thank you.
+        </p>
+        <div class="reassure-footer">
+          This is what you'd hear from a calm, experienced friend who's been
+          through a few crashes. We wrote it for you in advance, so it's here
+          when you need it.
+        </div>
+      </div>
+
       <!-- ─── MACRO ─── -->
       <div class="section-label">
         Macro
@@ -3911,6 +4276,21 @@
         </div>
       </div>
 
+      <!-- Your Plan (Investor Playbook) -->
+      <div class="settings-section">
+        <div class="settings-section-label">Your playbook</div>
+        <div class="settings-group">
+          <div class="plan-setup">
+            <div class="plan-setup-intro">Markets crash. Fear takes over. In that moment, you won't feel like buying — even when the signal says you should. Decide <em>now</em>, while you're calm, so future-you doesn't have to think.</div>
+            <div class="plan-commitment">
+              <div class="plan-commitment-text">"When InvestAssist shows a buy signal during a significant drawdown, I will follow the signal — even when it feels uncomfortable."</div>
+              <div class="plan-commitment-check"><span class="check-icon">✓</span> I commit to this</div>
+            </div>
+            <div class="plan-helper">This is your promise to yourself, not to us. When a buy signal appears during a scary market, we'll remind you of what you decided here.</div>
+          </div>
+        </div>
+      </div>
+
       <!-- Notifications -->
       <div class="settings-section">
         <div class="settings-section-label">Notifications</div>
@@ -4165,6 +4545,12 @@
         ${data.priceChange ? `<div class="sheet-price-change ${data.priceDirection || ''}">${data.priceChange}</div>` : ''}
       </div>
     ` : '';
+    const planBlock = data.showMute ? `
+      <div class="sheet-plan">
+        <div class="plan-reminder-label">Your playbook</div>
+        ${data.title} is near its recent low. You committed: <em>"I will follow the signal — even when it feels uncomfortable."</em>
+      </div>
+    ` : '';
     body.innerHTML = `
       <div class="sheet-header">
         <div class="sheet-header-left">
@@ -4174,6 +4560,7 @@
         ${priceBlock}
       </div>
       <div class="sheet-action-row">${data.action}</div>
+      ${planBlock}
       <div class="sheet-section"><div class="sheet-reason">${data.reason}</div></div>
       ${data.why ? `<div class="sheet-section"><div class="sheet-section-label">Why</div>${data.why}</div>` : ''}
       ${data.deep ? `<div class="sheet-section"><div class="sheet-section-label">Deep dive</div>${data.deep}</div>` : ''}
@@ -4197,6 +4584,26 @@
       btn.classList.remove('muted');
       btn.textContent = "Mute for 1 week";
     }
+  }
+
+  // ───── Investor Playbook check-in ─────
+  function checkinYes() {
+    const card = document.getElementById('checkinCard');
+    const msg = document.getElementById('checkinMsg');
+    msg.innerHTML = '<strong>That takes real discipline.</strong> You\'ve followed your playbook 4 times during drawdowns.<div class="checkin-streak">4 commitments honoured</div>';
+    card.classList.add('responded');
+  }
+  function checkinNo() {
+    const card = document.getElementById('checkinCard');
+    card.classList.add('show-skip');
+  }
+  function checkinSkipDone(btn) {
+    const card = document.getElementById('checkinCard');
+    const msg = document.getElementById('checkinMsg');
+    const reason = btn.textContent;
+    msg.innerHTML = 'Noted. Most people feel that way during a drop — it\'s normal. The signal will still be here tomorrow if you change your mind.';
+    card.classList.remove('show-skip');
+    card.classList.add('responded');
   }
 
   // ───── Settings modal ─────
