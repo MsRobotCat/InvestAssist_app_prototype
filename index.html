@@ -61,11 +61,12 @@
   }
 
   body {
-    background: #000000;
+    background: linear-gradient(160deg, #CBD1C3 0%, #B8BFB0 100%);
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     padding: 32px 20px 64px;
   }
 
@@ -3744,6 +3745,12 @@
               <div class="plan-commitment-text">"When there's a buy signal during a drawdown, I will not sell — even if I'm not ready to buy."</div>
               <div class="plan-commitment-check"><span class="check-icon">✓</span> This is my commitment</div>
             </div>
+            <div class="plan-commitment" onclick="selectPlaybook(this)">
+              <div class="plan-commitment-text" style="font-style:normal;color:var(--ink-3);font-family:'Manrope',sans-serif;font-size:13px;">Write your own</div>
+              <textarea class="plan-custom-input" onclick="event.stopPropagation();" placeholder="In your own words — what will you commit to when the market crashes?"
+                style="width:100%;margin-top:8px;padding:12px;border:1px solid var(--border);border-radius:8px;font-family:'Fraunces',Georgia,serif;font-size:14px;font-style:italic;color:var(--ink);line-height:1.5;resize:none;background:var(--bg);outline:none;min-height:70px;display:none;"></textarea>
+              <div class="plan-commitment-check"><span class="check-icon">✓</span> This is my commitment</div>
+            </div>
             <div class="plan-helper">This is your promise to yourself, not to us. When a scary market triggers your commitment, we'll remind you of what you chose here.</div>
           </div>
         </div>
@@ -4364,8 +4371,17 @@
   // ───── Playbook selection ─────
   function selectPlaybook(el) {
     var all = el.parentElement.querySelectorAll('.plan-commitment');
-    for (var i = 0; i < all.length; i++) all[i].classList.remove('selected');
+    for (var i = 0; i < all.length; i++) {
+      all[i].classList.remove('selected');
+      var ta = all[i].querySelector('.plan-custom-input');
+      if (ta) ta.style.display = 'none';
+    }
     el.classList.add('selected');
+    var textarea = el.querySelector('.plan-custom-input');
+    if (textarea) {
+      textarea.style.display = 'block';
+      textarea.focus();
+    }
   }
 
 
