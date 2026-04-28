@@ -3063,8 +3063,8 @@
             </div>
             <div class="stack-right">
               <div class="stack-price-block">
-                <span class="stack-price">$198.40</span>
-                <span class="stack-pct down">−1.1%</span>
+                <span class="stack-price" id="bd-soxx-price">$198.40</span>
+                <span class="stack-pct down" id="bd-soxx-pct">−1.1%</span>
               </div>
               <span class="stack-chev">⌄</span>
             </div>
@@ -3114,8 +3114,8 @@
             </div>
             <div class="stack-right">
               <div class="stack-price-block">
-                <span class="stack-price">$72.40</span>
-                <span class="stack-pct down">−1.4%</span>
+                <span class="stack-price" id="bd-ixn-price">$72.40</span>
+                <span class="stack-pct down" id="bd-ixn-pct">−1.4%</span>
               </div>
               <span class="stack-chev">⌄</span>
             </div>
@@ -3139,8 +3139,8 @@
             </div>
             <div class="stack-right">
               <div class="stack-price-block">
-                <span class="stack-price">5,612</span>
-                <span class="stack-pct down">−0.4%</span>
+                <span class="stack-price" id="bd-sp500-price">5,612</span>
+                <span class="stack-pct down" id="bd-sp500-pct">−0.4%</span>
               </div>
               <span class="stack-chev">⌄</span>
             </div>
@@ -3184,8 +3184,8 @@
             </div>
             <div class="stack-right">
               <div class="stack-price-block">
-                <span class="stack-price">17,842</span>
-                <span class="stack-pct down">−0.6%</span>
+                <span class="stack-price" id="bd-nasdaq-price">17,842</span>
+                <span class="stack-pct down" id="bd-nasdaq-pct" id="bd-nasdaq-pct">−0.6%</span>
               </div>
               <span class="stack-chev">⌄</span>
             </div>
@@ -3225,8 +3225,8 @@
             </div>
             <div class="stack-right">
               <div class="stack-price-block">
-                <span class="stack-price">41,980</span>
-                <span class="stack-pct down">−0.3%</span>
+                <span class="stack-price" id="bd-dow-price">41,980</span>
+                <span class="stack-pct down" id="bd-dow-pct" id="bd-dow-pct">−0.3%</span>
               </div>
               <span class="stack-chev">⌄</span>
             </div>
@@ -3305,8 +3305,8 @@
             </div>
             <div class="stack-right">
               <div class="stack-price-block">
-                <span class="stack-price">30</span>
-                <span class="stack-pct" style="color:var(--amber-2);">very high</span>
+                <span class="stack-price" id="bd-vix-price">30</span>
+                <span class="stack-pct" id="bd-vix-status" style="color:var(--amber-2);">very high</span>
               </div>
               <span class="stack-chev">⌄</span>
             </div>
@@ -3316,7 +3316,7 @@
               <div class="rsi-row">
                 <span class="rsi-label">Level</span>
                 <div class="vix-track"><div class="rsi-marker" style="left:68%;"></div></div>
-                <span class="rsi-value">30</span>
+                <span class="rsi-value" id="bd-vix-val">30</span>
               </div>
               <div class="range-ends" style="margin-top:6px;">
                 <span>calm (12)</span>
@@ -4343,6 +4343,44 @@
           return aSignal - bSignal;
         });
         items.forEach(function(item) { sgWatchlist.appendChild(item); });
+      }
+
+
+      // Swap Breakdown indices, sectors, VIX for bullish day
+      if (mode === 'normal') {
+        // VIX
+        e = document.getElementById('bd-vix-price'); if (e) e.textContent = '13';
+        e = document.getElementById('bd-vix-status'); if (e) { e.textContent = 'normal'; e.style.color = 'var(--sage-2)'; }
+        e = document.getElementById('bd-vix-val'); if (e) e.textContent = '13';
+        // Indices - all positive
+        e = document.getElementById('bd-sp500-price'); if (e) e.textContent = '5,920';
+        e = document.getElementById('bd-sp500-pct'); if (e) { e.textContent = '+0.8%'; e.className = 'stack-pct up'; }
+        e = document.getElementById('bd-nasdaq-price'); if (e) e.textContent = '19,240';
+        e = document.getElementById('bd-nasdaq-pct'); if (e) { e.textContent = '+1.1%'; e.className = 'stack-pct up'; }
+        e = document.getElementById('bd-dow-price'); if (e) e.textContent = '43,800';
+        e = document.getElementById('bd-dow-pct'); if (e) { e.textContent = '+0.5%'; e.className = 'stack-pct up'; }
+        // Sectors - all positive
+        e = document.getElementById('bd-soxx-price'); if (e) e.textContent = '$242.60';
+        e = document.getElementById('bd-soxx-pct'); if (e) { e.textContent = '+1.4%'; e.className = 'stack-pct up'; }
+        e = document.getElementById('bd-ixn-price'); if (e) e.textContent = '$83.80';
+        e = document.getElementById('bd-ixn-pct'); if (e) { e.textContent = '+1.2%'; e.className = 'stack-pct up'; }
+      } else if (mode === 'drawdown') {
+        // VIX
+        e = document.getElementById('bd-vix-price'); if (e) e.textContent = '30';
+        e = document.getElementById('bd-vix-status'); if (e) { e.textContent = 'very high'; e.style.color = 'var(--amber-2)'; }
+        e = document.getElementById('bd-vix-val'); if (e) e.textContent = '30';
+        // Indices - all negative
+        e = document.getElementById('bd-sp500-price'); if (e) e.textContent = '5,612';
+        e = document.getElementById('bd-sp500-pct'); if (e) { e.textContent = '−0.4%'; e.className = 'stack-pct down'; }
+        e = document.getElementById('bd-nasdaq-price'); if (e) e.textContent = '17,820';
+        e = document.getElementById('bd-nasdaq-pct'); if (e) { e.textContent = '−0.6%'; e.className = 'stack-pct down'; }
+        e = document.getElementById('bd-dow-price'); if (e) e.textContent = '41,200';
+        e = document.getElementById('bd-dow-pct'); if (e) { e.textContent = '−0.3%'; e.className = 'stack-pct down'; }
+        // Sectors - all negative
+        e = document.getElementById('bd-soxx-price'); if (e) e.textContent = '$208.40';
+        e = document.getElementById('bd-soxx-pct'); if (e) { e.textContent = '−1.8%'; e.className = 'stack-pct down'; }
+        e = document.getElementById('bd-ixn-price'); if (e) e.textContent = '$72.40';
+        e = document.getElementById('bd-ixn-pct'); if (e) { e.textContent = '−1.4%'; e.className = 'stack-pct down'; }
       }
 
     // Switch back to To do tab
